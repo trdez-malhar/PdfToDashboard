@@ -10,6 +10,9 @@
     
     <script>
         var chartData = JSON.parse('{{ data | tojson | safe }}');
+        function goBack() {
+            window.history.back();
+        }
     </script>
     <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
     <style>
@@ -46,10 +49,26 @@
             font-weight: bold;
         }
         canvas { background: white; padding: 10px; border-radius: 8px; }
+        .back-button {
+    color: rgb(0, 0, 0);
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+
     </style>
 </head>
 <body>
     <div class="container">
+        <button class="back-button" onclick="goBack()">
+            ←
+        </button>
         <div class="card full-width" id="userName">{{ data["Page1"]['Client'] }}</div>
         <div class="grid">
             <div class="card" id="csdl">CSDL : ₹{{ data["Page1"]['CSDL'] }}</div>

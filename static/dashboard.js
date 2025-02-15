@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  
     console.log(chartData)
     let MonthYear = chartData.LineChartData["MonthYear"];
     let PortfolioValuation = chartData.LineChartData["PortfolioValuation"];
