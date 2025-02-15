@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    
+    <script>
+        var chartData = JSON.parse('{{ data | tojson | safe }}');
+    </script>
+    <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 10px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .full-width {
+            width: 100%;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .grid .card {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        canvas { background: white; padding: 10px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card full-width" id="userName">{{ data["Page1"]['Client'] }}</div>
+        <div class="grid">
+            <div class="card" id="csdl">CSDL : ₹{{ data["Page1"]['CSDL'] }}</div>
+            <div class="card" id="nsdl">NSDL : ₹{{ data["Page1"]['NSDL'] }}</div>
+            <div class="card" id="mf">Mutual Fund : ₹{{ data["Page1"]['Mutual Fund'] }}</div>
+            <div class="card" id="total">Total : ₹{{ data["Page1"]['Total'] }}</div>
+        </div>
+        <div class="card"><canvas id="lineChart"></canvas></div>
+        <div class="card"><canvas id="pieChart"></canvas></div>
+
+    </div>
+   
+</body>
+</html>
