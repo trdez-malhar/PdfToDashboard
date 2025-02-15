@@ -11,11 +11,11 @@ Ensure you have the following dependencies installed:
 
 1. Clone this repository:
    ```sh
-   git clone https://github.com/your-username/your-repository.git
+   git clone https://github.com/trdez-malhar/PdfToDashboard.git
    ```
 2. Navigate to the project directory:
    ```sh
-   cd your-repository
+   cd PdfToDashboard
    ```
 3. Create and activate a virtual environment (optional but recommended):
    ```sh
