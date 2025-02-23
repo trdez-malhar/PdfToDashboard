@@ -3,21 +3,22 @@ import re
 import os
 import pdfplumber
 import csv
+
 # Extract Tables from PDF
 def clean_text(text):
     """Remove non-English characters and normalize text."""
     if text is None:
         return ""
-    
+
     # Normalize Unicode characters
     text = unicodedata.normalize('NFKD', text)
-    
+
     # Remove non-English characters (keep letters, numbers, spaces, and basic punctuation)
     text = re.sub(r'[^A-Za-z0-9\s.,!?;:\'\"()-]', '', text)
-    
+
     # Replace multiple spaces with a single space
     text = re.sub(r'\s+', ' ', text).strip()
-    
+
     return text
 
 def savetable(filepath, outputpath):
