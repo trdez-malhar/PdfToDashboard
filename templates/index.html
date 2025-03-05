@@ -4,16 +4,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload PDF</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <style>
+        /* Full-screen background for particles */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: #f8f9fa;
+            z-index: -1; /* Send it to the back */
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .upload-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            position: relative;
+            z-index: 1; /* Ensure it's above particles */
+        }
+
+        #loading {
+            display: none;
+        }
+
+        .typed-text {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #007bff;
+            position: relative;
+            z-index: 1; /* Keep text visible over particles */
+        }
+    </style>
 </head>
 <body>
-    <h2>Upload a PDF File</h2>
-    <form id="uploadForm">
-        <input type="file" id="fileInput" name="file" accept="application/pdf">
-        <button type="submit">Upload</button>
-    </form>
 
-    <p id="status"></p>
+    <!-- Particles.js background -->
+    <div id="particles-js"></div>
+
+    <h2 class="typed-text"><span id="typed"></span></h2> 
+
+    <div class="upload-container">
+        <h3 class="mb-3">Upload a PDF File</h3>
+        <form id="uploadForm">
+            <input type="file" id="fileInput" name="file" accept="application/pdf" class="form-control mb-2">
+            <button type="submit" class="btn btn-primary w-100">Upload</button>
+        </form>
+        <p id="status" class="mt-2 text-danger"></p>
+        <div id="loading" class="mt-2 text-primary">Uploading... Please wait.</div>
+    </div>
+
+    <script>
+        // Typed.js effect
+        document.addEventListener("DOMContentLoaded", function() {
+            var typed = new Typed("#typed", {
+                strings: ["Welcome to PDF to Dashboard"],
+                typeSpeed: 50,
+                backSpeed: 25,
+                showCursor: false,
+                loop: false
+            });
+        });
+
+        // Particles.js configuration
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#007bff" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5, "random": true },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#007bff", "opacity": 0.4, "width": 1 },
+                "move": { "enable": true, "speed": 2, "direction": "none", "out_mode": "out" }
+            },
+            "interactivity": {
+                "events": { "onhover": { "enable": true, "mode": "repulse" } },
+                "modes": { "repulse": { "distance": 100, "duration": 0.4 } }
+            }
+        });
+    </script>
+
 </body>
 </html>

@@ -3,83 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Portfolio Dashboard</title>
+
+    <!-- Bootstrap & DataTables CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+    <!-- jQuery & DataTables JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-    
-    <script>
-        var chartData = JSON.parse('{{ data | tojson | safe }}');
-        function goBack() {
-            window.history.back();
-        }
-    </script>
-    <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 10px;
-            background-color: #f4f4f4;
-        }
-        .container {
-            max-width: 800px;
-            margin: auto;
-        }
-        .card {
-            background: white;
-            padding: 20px;
-            margin: 10px 0;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        .full-width {
-            width: 100%;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-        }
-        .grid .card {
-            font-size: 18px;
-            font-weight: bold;
-        }
-        canvas { background: white; padding: 10px; border-radius: 8px; }
-        .back-button {
-    color: rgb(0, 0, 0);
-    border: none;
-    padding: 10px 15px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    position: absolute;
-    top: 10px;
-    left: 10px;
-}
-
-
+        .card { cursor: pointer; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <button class="back-button" onclick="goBack()">
-            ←
-        </button>
-        <div class="card full-width" id="userName">{{ data["Page1"]['Client'] }}</div>
-        <div class="grid">
-            <div class="card" id="csdl">CSDL : ₹{{ data["Page1"]['CSDL'] }}</div>
-            <div class="card" id="nsdl">NSDL : ₹{{ data["Page1"]['NSDL'] }}</div>
-            <div class="card" id="mf">Mutual Fund : ₹{{ data["Page1"]['Mutual Fund'] }}</div>
-            <div class="card" id="total">Total : ₹{{ data["Page1"]['Total'] }}</div>
-        </div>
-        <div class="card"><canvas id="lineChart"></canvas></div>
-        <div class="card"><canvas id="pieChart"></canvas></div>
+    <a href="javascript:history.back()" class="back-button">← Back</a>
 
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card text-center" id="cdsl">
+                    <div class="card-body">
+                        <h5 class="card-title">CDSL Demat</h5>
+                        <p class="card-text">Value: ₹<span id="cdsl-value"></span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center" id="nsdl">
+                    <div class="card-body">
+                        <h5 class="card-title">NSDL Demat</h5>
+                        <p class="card-text">Value: <span id="nsdl-value">Data Not Available</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center" id="mf">
+                    <div class="card-body">
+                        <h5 class="card-title">Mutual Fund</h5>
+                        <p class="card-text">Value: ₹<span id="mf-value"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4" id="account-details">
+            <h4>Account Details</h4>
+            <p id="account-info">Click on a card to see details.</p>
+        </div>
+
+        <!-- Portfolio Summary (Visible by Default) -->
+        <div id="portfolio-section">
+            <h4 class="mt-5">Portfolio Summary</h4>
+            <table id="portfolio-summary-table" class="table table-bordered display">
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Portfolio Valuation (₹)</th>
+                        <!-- <th>Change (%)</th> -->
+                    </tr>
+                </thead>
+                <tbody id="portfolio-summary"></tbody>
+            </table>
+
+            <h4 class="mt-4">Asset Allocation</h4>
+            <table id="asset-allocation-table" class="table table-bordered display">
+                <thead>
+                    <tr>
+                        <th>Asset Type</th>
+                        <th>Value (₹)</th>
+                        <th>Percentage (%)</th>
+                    </tr>
+                </thead>
+                <tbody id="asset-allocation"></tbody>
+            </table>
+        </div>
+
+        <!-- CDSL Holdings Table (Hidden Initially) -->
+        <div id="cdsl-holdings-table" class="hidden mt-4">
+            <h4>CDSL Holdings</h4>
+            <table id="cdsl-holdings-dt" class="table table-bordered display">
+                <thead>
+                    <tr>
+                        <th>Security</th>
+                        <th>Current Balance</th>
+                        <th>Market Price</th>
+                        <th>Value (₹)</th>
+                    </tr>
+                </thead>
+                <tbody id="cdsl-holdings-body"></tbody>
+            </table>
+        </div>
+
+        <!-- Mutual Fund Holdings Table (Hidden Initially) -->
+        <div id="mf-holdings-table" class="hidden mt-4">
+            <h4>Mutual Fund Holdings</h4>
+            <table id="mf-holdings-dt" class="table table-bordered display">
+                <thead>
+                    <tr>
+                        <th>Scheme Name</th>
+                        <th>ISIN</th>
+                        <th>Closing Balance Units</th>
+                        <th>NAV</th>
+                        <th>Valuation (₹)</th>
+                    </tr>
+                </thead>
+                <tbody id="mf-holdings-body"></tbody>
+            </table>
+        </div>
     </div>
-   
+
+    <script>
+        let portfolioData = JSON.parse('{{ data | tojson | safe }}');
+    
+        $(document).ready(function() {
+            // Populate initial values
+            $('#cdsl-value').text(portfolioData.accounts["CDSL Demat Account"].Valuein);
+            $('#mf-value').text(portfolioData.accounts["Mutual Fund Folios"].Valuein);
+    
+            // Populate Portfolio Summary
+            Object.entries(portfolioData.portfolio.month_wise).forEach(([month, details]) => {
+                $('#portfolio-summary').append(
+                    `<tr>
+                        <td>${month}</td>
+                        <td>${details.PortfolioValuationIn}</td>
+                       
+                    </tr>`
+                );
+            });
+    
+            // Populate Asset Allocation
+            Object.entries(portfolioData.asset_allocation).forEach(([type, details]) => {
+                $('#asset-allocation').append(
+                    `<tr>
+                        <td>${type}</td>
+                        <td>${details.Value}</td>
+                        <td>${details.Percentage}</td>
+                    </tr>`
+                );
+            });
+    
+            // Initialize DataTables
+            $('#portfolio-summary-table').DataTable();
+            $('#asset-allocation-table').DataTable();
+    
+            function toggleView(showTable, hideTable, accountInfo) {
+                if ($(showTable).hasClass('hidden')) {
+                    $('#portfolio-section').hide();
+                    $('#account-details').show(); // Show account details
+                    $('#account-info').html(accountInfo);
+                    $(showTable).removeClass('hidden');
+                    $(hideTable).addClass('hidden');
+                } else {
+                    $('#portfolio-section').show();
+                    $('#account-details').hide(); // Hide account details
+                    $(showTable).addClass('hidden');
+                }
+            }
+    
+            // Function to show CDSL Holdings
+            $('#cdsl').click(function() {
+                let account = portfolioData.accounts["CDSL Demat Account"];
+                let accountInfo = `
+                    <strong>Account Details:</strong> ${account.AccountDetails}<br>
+                    <strong>No. of ISINs:</strong> ${account.NoofISINsSchemesISIN}<br>
+                    <strong>Value:</strong> ₹${account.Valuein}
+                `;
+    
+                $('#cdsl-holdings-body').empty();
+                Object.entries(portfolioData.CDSLHoldings).forEach(([isin, details]) => {
+                    $('#cdsl-holdings-body').append(
+                        `<tr>
+                            <td>${details.Security}</td>
+                            <td>${details.CurrentBal}</td>
+                            <td>${details.MarketPriceFaceValue}</td>
+                            <td>${details.Value}</td>
+                        </tr>`
+                    );
+                });
+    
+                toggleView('#cdsl-holdings-table', '#mf-holdings-table', accountInfo);
+                $('#cdsl-holdings-dt').DataTable();
+            });
+    
+            // Function to show Mutual Fund Holdings
+            $('#mf').click(function() {
+                let account = portfolioData.accounts["Mutual Fund Folios"];
+                let accountInfo = `
+                    <strong>Account Details:</strong> ${account.AccountDetails}<br>
+                    <strong>No. of Schemes:</strong> ${account.NoofISINsSchemesISIN}<br>
+                    <strong>Value:</strong> ₹${account.Valuein}
+                `;
+    
+                $('#mf-holdings-body').empty();
+                Object.entries(portfolioData.MFHoldings).forEach(([scheme, details]) => {
+                    $('#mf-holdings-body').append(
+                        `<tr>
+                            <td>${scheme}</td>
+                            <td>${details.ISIN}</td>
+                            <td>${details.ClosingBalUnits || 'N/A'}</td>
+                            <td>${details.NAV}</td>
+                            <td>${details.Valuation}</td>
+                        </tr>`
+                    );
+                });
+    
+                toggleView('#mf-holdings-table', '#cdsl-holdings-table', accountInfo);
+                $('#mf-holdings-dt').DataTable();
+            });
+        });
+    </script>
+    
 </body>
 </html>

@@ -11,6 +11,17 @@ $(document).ready(function() {
         let formData = new FormData();
         formData.append("file", fileInput);
 
+        $("#status").text(""); 
+        $("#loading").show();  
+        $("button").prop("disabled", true); 
+
+        let startTime = new Date().getTime(); // Start time
+
+        let timer = setInterval(() => {
+            let elapsedTime = ((new Date().getTime() - startTime) / 1000).toFixed(1);
+            $("#loading").text(`Uploading... Please wait. Time elapsed: ${elapsedTime} sec`);
+        }, 100); // Update every 100ms
+
         $.ajax({
             url: "/upload",
             type: "POST",
@@ -18,12 +29,17 @@ $(document).ready(function() {
             contentType: false,
             processData: false,
             success: function(response) {
-                $("#status").text(response.message);
-                
-                window.location.href = "http://127.0.0.1:5000/dashboard";
+                clearInterval(timer); // Stop the timer
+                $("#loading").text("Upload complete! Redirecting...");
+                setTimeout(() => {
+                    window.location.href = "/dashboard";
+                }, 1000);
             },
             error: function() {
+                clearInterval(timer); 
                 $("#status").text("An error occurred.");
+                $("#loading").hide();
+                $("button").prop("disabled", false);
             }
         });
     });
