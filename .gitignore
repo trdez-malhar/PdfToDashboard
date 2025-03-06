@@ -175,5 +175,9 @@ cython_debug/
 data/extracted_tables
 output.csv
 output.json
-uploads/sb.pdf
-uploads/SEP2024_AA12920184_HLD.PDF
+uploads/
+*.ipynb
+*.csv
+*.json
+*.pdf
+
