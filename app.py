@@ -1,6 +1,8 @@
 import os
 import re
 import json
+from io import BytesIO
+import fitz  # PyMuPDF 
 import time  # Import time module for timestamp generation
 # import csv
 import unicodedata
@@ -27,6 +29,7 @@ app.config["EXTRACTED_TABLES"] = EXTRACTED_TABLES
 
 # Predefined Data Structure
 predefined_data = {
+    "client_info": {"name":None},
     "accounts": None,
     "portfolio": {"month_wise": None},
     "asset_allocation": None,
@@ -83,12 +86,16 @@ def get_same_tables(dfs):
 
 def process_holdings_data(df):
     print("inside process_holdings_data")
+    df.replace("", pd.NA, inplace=True)
     if df.columns[0] == "ISINISIN":
+        df.dropna(subset=["ISINISIN"], inplace=True)
         if predefined_data["CDSLHoldings"]:
             predefined_data["CDSLHoldings"].update(dataframe_to_dict(df))
         else:
             predefined_data["CDSLHoldings"] = dataframe_to_dict(df)
     elif df.columns[0] == "SchemeName":
+        df.dropna(subset=["SchemeName"], inplace=True)
+        df.drop(df[df["SchemeName"] == "Grand Total"].index, inplace=True)
         if predefined_data["MFHoldings"]:
             predefined_data["MFHoldings"].update(dataframe_to_dict(df))
         else:
@@ -123,6 +130,8 @@ def process_tables():
         
         # Save DataFrame as CSV
         df.to_csv(csv_filename, index=False)
+        if i == 0:
+            predefined_data["client_info"]["name"] = df["NameJointNames"][0]
         if i == 1:
             predefined_data["accounts"] = dataframe_to_dict(df)
         elif i == 2:
@@ -133,12 +142,13 @@ def process_tables():
             process_holdings_data(df)
             
         
-    with open("final_data.json", "w") as json_file:
+    with open(f"final_data_{predefined_data['client_info']["name"]}.json", "w") as json_file:
         json.dump(predefined_data, json_file, indent=4)
 
 def save_and_extract(filepath):
     """Save uploaded PDF and extract tables."""
     extract_pdf_data(filepath)
+    print("Extracted data from PDF")
     process_tables()
 
 @app.route("/")
@@ -160,7 +170,30 @@ def upload_file():
     
     if file and allowed_file(file.filename):
         filepath = os.path.join(app.config["UPLOAD_FOLDER"], file.filename)
+        
+        # Save the file first
         file.save(filepath)
+        
+        # Validate the document using PyMuPDF (fitz)
+        try:
+            with fitz.open(filepath) as doc:  # Open from saved file
+                print("PDF loaded successfully for checking")
+                
+                if len(doc) == 0:
+                    return jsonify({"status": "error", "message": "Empty or unreadable PDF document"})
+                
+                first_page_text = doc[0].get_text("text")
+                print("Extracted text from first page")
+                
+                # Case-insensitive check
+                if "consolidated account statement" not in first_page_text.lower():
+                    print("Required text not found")
+                    return jsonify({"status": "error", "message": "Invalid document"})
+        
+        except Exception as e:
+            return jsonify({"status": "error", "message": f"PDF validation failed: {str(e)}"})
+        
+        # Extract data after validation
         save_and_extract(filepath)
         return jsonify({"status": "success", "message": f"File uploaded successfully: {file.filename}"})
     
