@@ -5,67 +5,174 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio Dashboard</title>
 
+
     <!-- Bootstrap & DataTables CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <!-- jQuery & DataTables JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
     <style>
-        .card { cursor: pointer; }
-        .hidden { display: none; }
+        body {
+            background-color: #f4f7fc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .card {
+            cursor: pointer;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            background-color: #ffffff;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .card-text {
+            font-size: 1rem;
+            color: #777;
+        }
+
+        .back-button {
+            font-size: 1.2rem;
+            color: #007bff;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        .back-button:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            margin-top: 30px;
+        }
+
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .table th {
+            background-color: #343a40;
+            color: white;
+        }
+
+        .table tbody tr:hover {
+            background-color: #e9ecef;
+        }
+
+        .table td {
+            font-size: 1rem;
+        }
+
+        .header-section {
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .header-section h4 {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            color: #007bff;
+        }
+
+        .back-button i {
+            margin-right: 10px;
+        }
+
+        .mt-4 {
+            margin-top: 30px;
+        }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <a href="javascript:history.back()" class="back-button">← Back</a>
 
-    <div class="container mt-4">
+    <a href="javascript:history.back()" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
+
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header-section">
+            <h4>Portfolio Dashboard</h4>
+            <p>Wealth Management</p>
+        </div>
+
+        <!-- Cards Section -->
         <div class="row">
             <div class="col-md-3">
-                <div class="card text-center" id="cdsl">
+                <div class="card text-center bg-light" id="cdsl">
                     <div class="card-body">
+                        <i class="fas fa-university card-icon"></i>
                         <h5 class="card-title">CDSL Demat</h5>
-                        <p class="card-text">Value: ₹<span id="cdsl-value"></span></p>
+                        <p class="card-text">Value: ₹<span id="cdsl-value">Loading...</span></p>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card text-center" id="nsdl">
+                <div class="card text-center bg-light" id="nsdl">
                     <div class="card-body">
+                        <i class="fas fa-warehouse card-icon"></i>
                         <h5 class="card-title">NSDL Demat</h5>
-                        <p class="card-text">Value: <span id="nsdl-value">Data Not Available</span></p>
+                        <p class="card-text">Value: ₹<span id="nsdl-value">Data Not Available</span></p>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card text-center" id="mf">
+                <div class="card text-center bg-light" id="mf">
                     <div class="card-body">
+                        <i class="fas fa-chart-line card-icon"></i>
                         <h5 class="card-title">Mutual Fund</h5>
-                        <p class="card-text">Value: ₹<span id="mf-value"></span></p>
+                        <p class="card-text">Value: ₹<span id="mf-value">Loading...</span></p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="mt-4" id="account-details">
+        <div id="account-details" class="mt-4">
             <h4>Account Details</h4>
             <p id="account-info">Click on a card to see details.</p>
         </div>
 
-        <!-- Portfolio Summary (Visible by Default) -->
-        <div id="portfolio-section">
-            <h4 class="mt-5">Portfolio Summary</h4>
+        <!-- Portfolio Summary Section -->
+        <div id="portfolio-section" class="mt-4">
+            <h4 class="mt-4">Portfolio Summary</h4>
             <table id="portfolio-summary-table" class="table table-bordered display">
                 <thead>
                     <tr>
                         <th>Month</th>
                         <th>Portfolio Valuation (₹)</th>
-                        <!-- <th>Change (%)</th> -->
                     </tr>
                 </thead>
-                <tbody id="portfolio-summary"></tbody>
+                <tbody id="portfolio-summary">
+                    <!-- Data will be added here -->
+                </tbody>
             </table>
 
             <h4 class="mt-4">Asset Allocation</h4>
@@ -77,7 +184,9 @@
                         <th>Percentage (%)</th>
                     </tr>
                 </thead>
-                <tbody id="asset-allocation"></tbody>
+                <tbody id="asset-allocation">
+                    <!-- Data will be added here -->
+                </tbody>
             </table>
         </div>
 
@@ -129,7 +238,6 @@
                     `<tr>
                         <td>${month}</td>
                         <td>${details.PortfolioValuationIn}</td>
-                       
                     </tr>`
                 );
             });
@@ -214,6 +322,9 @@
                 $('#mf-holdings-dt').DataTable();
             });
         });
+
+
+         
     </script>
     
 </body>

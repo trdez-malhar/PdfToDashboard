@@ -30,16 +30,28 @@ $(document).ready(function() {
             processData: false,
             success: function(response) {
                 clearInterval(timer); // Stop the timer
-                $("#loading").text("Upload complete! Redirecting...");
-                setTimeout(() => {
-                    window.location.href = "/dashboard";
-                }, 1000);
+
+                if (response.status === "error") {
+                    $("#status").text(response.message).css("color", "red");
+                    $("#loading").hide();
+                    $("button").prop("disabled", false);
+                } else {
+                    $("#loading").text("Upload complete! Redirecting...");
+                    setTimeout(() => {
+                        window.location.href = "/dashboard";
+                    }, 1000);
+                }
             },
-            error: function() {
-                clearInterval(timer); 
-                $("#status").text("An error occurred.");
+            error: function(xhr) {
+                clearInterval(timer);
                 $("#loading").hide();
                 $("button").prop("disabled", false);
+
+                let errorMessage = "An error occurred.";
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                }
+                $("#status").text(errorMessage).css("color", "red");
             }
         });
     });
