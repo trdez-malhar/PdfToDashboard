@@ -1,153 +1,79 @@
-import unicodedata
-import re
-import os
-import pdfplumber
-import csv
-import json
-from docling.datamodel.pipeline_options import PdfPipelineOptions
-from docling.document_converter import DocumentConverter, PdfFormatOption
-from docling.datamodel.base_models import InputFormat
-import pandas as pd
-from IPython.display import display
-import re
-import unicodedata
-import json
+# import json
+# import fitz  # PyMuPDF
+# import time
+# from docling.datamodel.pipeline_options import PdfPipelineOptions
+# from docling.document_converter import DocumentConverter, PdfFormatOption
+# from docling.datamodel.base_models import InputFormat
+# from concurrent.futures import ProcessPoolExecutor
 
-predefined_data = {
-    "accounts" : None,
-    "portfolio" : {"month_wise" : None},
-    "asset_allocation" : None,
-}
+# PDF_PATH = r"C:\Users\malhar.yadav\scripts\PdfToDashboard\uploads\sb.pdf"
 
-html_data_path = ""
-
-def dataframe_to_dict(df):
-    # Extract the first column name (it will be dictionary keys)
-    dict_key_column = df.columns[0]
-
-    # Drop rows where the first column is NaN (optional, if needed)
-    df = df.dropna(subset=[dict_key_column])
-
-    # Convert the DataFrame into a nested dictionary
-    result_dict = {}
-    for _, row in df.iterrows():
-        key = row[dict_key_column]  # First column as the key
-        result_dict[key] = row.drop(dict_key_column).to_dict()  # Remaining columns as key-value pairs
+# def extract_page(page_number):
+#     """Extract a single page as a new PDF file."""
+#     with fitz.open(PDF_PATH) as doc:
+#         single_page_pdf = fitz.open()  # Create an empty PDF
+#         single_page_pdf.insert_pdf(doc, from_page=page_number, to_page=page_number)
+        
+#         temp_pdf_path = f"temp_page_{page_number}.pdf"
+#         single_page_pdf.save(temp_pdf_path)
+#         single_page_pdf.close()
     
-    return result_dict
+#     return temp_pdf_path
 
-def clean_strings(strings):
-    return [re.sub(r"[^a-zA-Z]", "", s) for s in strings]
-
-def clean_text(text):
-    """Remove non-English characters and normalize text."""
-    if text is None:
-        return ""
+# def process_page(page_pdf_path):
+#     """Process a single page PDF and return extracted data."""
+#     pipeline_options = PdfPipelineOptions(
+#         do_ocr=False,  # Assume digitally generated document
+#         do_table_structure=True,
+#         table_detection_mode="lattice",
+#     )
+#     converter = DocumentConverter(
+#         format_options={InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)}
+#     )
     
-    # Normalize Unicode characters
-    text = unicodedata.normalize('NFKD', text)
+#     result = converter.convert(page_pdf_path)
+#     return result.document.export_to_dict()
+
+# def extract_pdf_data():
+#     """Extract and process PDF data with multiprocessing while tracking time."""
     
-    # Remove non-English characters (keep letters, numbers, spaces, and basic punctuation)
-    text = re.sub(r'[^A-Za-z0-9\s.,!?;:\'\"()-]', '', text)
+#     start_time = time.time()  # Start timer
     
-    # Replace multiple spaces with a single space
-    text = re.sub(r'\s+', ' ', text).strip()
-    
-    return text
-table_dict = dict()
-# Function to extract and display tables
-def get_tables(json_data,i):
-    raw_data = json_data["tables"][i]["data"]["table_cells"]
+#     with fitz.open(PDF_PATH) as doc:
+#         num_pages = len(doc)
 
-    # Determine the max number of columns
-    max_columns = max(item["start_col_offset_idx"] + item["col_span"] for item in raw_data)
+#     print(f"PDF has {num_pages} pages.")
 
-    # Create an empty table structure
-    table = {}
+#     # Step 1: Extract each page as a separate PDF
+#     extract_start = time.time()
+#     page_pdfs = [extract_page(page_number) for page_number in range(num_pages)]
+#     extract_end = time.time()
+#     print(f"Page extraction time: {extract_end - extract_start:.2f} seconds")
 
-    # Populate table based on extracted data
-    for item in raw_data:
-        row_idx = item["start_row_offset_idx"]
-        col_idx = item["start_col_offset_idx"]
-        col_span = item["col_span"]
-        text = item["text"]
+#     # Step 2: Process each page in parallel
+#     process_start = time.time()
+#     with ProcessPoolExecutor() as executor:
+#         results = list(executor.map(process_page, page_pdfs))
+#     process_end = time.time()
+#     print(f"Parallel processing time: {process_end - process_start:.2f} seconds")
 
-        # Initialize row if not exists
-        if row_idx not in table:
-            table[row_idx] = [""] * max_columns  # Initialize empty columns
+#     # Step 3: Combine results
+#     combine_start = time.time()
+#     combined_result = {"tables": []}
+#     for result in results:
+#         combined_result["tables"].extend(result["tables"])
+#     combine_end = time.time()
+#     print(f"Data combination time: {combine_end - combine_start:.2f} seconds")
 
-        # Assign text to correct position, spanning columns if needed
-        for j in range(col_span):
-            table[row_idx][col_idx + j] = text if j == 0 else ""  # Leave merged columns empty after first
+#     # Step 4: Save to JSON
+#     save_start = time.time()
+#     with open("extracted_data.json", "w", encoding="utf-8") as fp:
+#         json.dump(combined_result, fp, indent=4)
+#     save_end = time.time()
+#     print(f"JSON save time: {save_end - save_start:.2f} seconds")
 
-    # Convert table dictionary to a structured list for DataFrame
-    structured_data = [table[row] for row in sorted(table.keys())]
+#     total_time = time.time() - start_time
+#     print(f"Total execution time: {total_time:.2f} seconds")
+# if __name__ == "__main__":
+#     extract_pdf_data()
 
-    # Extract column headers separately
-    columns = structured_data.pop(0)
-    columns = clean_strings(columns)
-    # Create DataFrame
-    df = pd.DataFrame(structured_data, columns=columns)
-
-    # # Display DataFrame using IPython display
-    # print(f"\n**Table {i+1}**")
-
-    # display(df)
-
-    if i == 1:
-        predefined_data["accounts"] = dataframe_to_dict(df)
-        # print(predefined_data)
-    if i == 2:
-        predefined_data["portfolio"]["month_wise"] = dataframe_to_dict(df)
-        # print(predefined_data)
-    if i == 3:
-        predefined_data["asset_allocation"] = dataframe_to_dict(df)
-        # print(predefined_data)
-
-
-    df.to_csv(f"table_{i+1}.csv", index=False)
-    table_dict[f"table_{i+1}"] = df
-
-# source = r"C:\Users\malhar.yadav\Downloads\SEP2024_AA12920184_HLD.PDF"  # document per local path or URL
-def extract_pdf_data(source:str, outputpath, file_name) -> None:
-        # Set pipeline options to optimize performance
-    pipeline_options = PdfPipelineOptions(
-        do_ocr=False,  # Disable OCR if the document is digitally generated
-        do_table_structure=True,
-        table_detection_mode="lattice",
-    )
-
-    # Initialize the DocumentConverter with the specified pipeline options
-    converter = DocumentConverter(
-        format_options={
-            InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
-        }
-    )
-    converter = DocumentConverter()
-    result = converter.convert(source)
-    # print(result.document.export_to_dict)  # output: "## Docling Technical Report[...]"
-    
-    with open("weddata.json",mode="w", encoding="utf-8") as fp:
-            fp.write(json.dumps(result.document.export_to_dict()))
-
-def savetable(filepath, outputpath, file_name):
-    # Define the path to the PDF file
-    pdf_path = filepath
-    # Define the output directory for CSV files
-    output_dir = outputpath
-
-    # Create the output directory if it doesn't exist
-    os.makedirs(output_dir, exist_ok=True)
-    extract_pdf_data(pdf_path, output_dir, file_name)
-    print("Data extracted successfully.")
-
-def return_data():
-    # Loop through tables and display each one
-    with open("weddata.json", mode="r", encoding="utf-8") as fp:
-        json_data = json.load(fp)
-
-    for i in range(json_data["tables"].__len__()):
-        get_tables(json_data, i)
-    with open("weddata123.json", "w") as json_file:
-            json.dump(predefined_data, json_file, indent=4)  # indent=4 makes it readable
-    return predefined_data
