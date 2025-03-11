@@ -4,7 +4,7 @@ from flask import Flask, request, render_template, jsonify, Blueprint
 from config import UPLOAD_FOLDER
 from utils.file_handler import allowed_file
 from utils.pdf_processor import save_and_extract, get_dashboard_data
-from db import insert_data, read_predefined_data
+from db import read_predefined_data, add_data
 
 # api_routes.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
@@ -46,7 +46,7 @@ def upload_file():
         except Exception as e:
             return jsonify({"status": "error", "message": f"PDF validation failed: {str(e)}"})
 
-        save_and_extract(filepath)
-        return jsonify({"status": "success", "message": f"File uploaded successfully: {file.filename}"})
-
+        predefined_data = save_and_extract(filepath)
+        if add_data(predefined_data):
+            return jsonify({"status": "success", "message": f"File uploaded successfully: {file.filename}"})
     return jsonify({"status": "error", "message": "Invalid file format. Only PDFs allowed."})

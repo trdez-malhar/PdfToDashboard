@@ -69,10 +69,15 @@ def process_holdings_data(df):
         df[cols_to_convert] = df[cols_to_convert].replace(",", "", regex=True).apply(pd.to_numeric)
         df.dropna(subset=["CurrentBal", "FreeBal", "MarketPriceFaceValue", "Value"], inplace=True)
         df.reset_index(drop=True, inplace=True)
-        isin_list = df["ISINISIN"].tolist()
-        isin_data = [get_isin_data(isin) for isin in isin_list]
-        df["Symbol"] = isin_data
-        df["Industry"] = [get_company_profile(symbol) for symbol in isin_data]
+        # isin_list = df["ISINISIN"].tolist()
+        # isin_data = [get_isin_data(isin) for isin in isin_list]
+        # df["symbol"] = isin_data
+        # df["industry"] = [get_company_profile(symbol) for symbol in isin_data]
+        rename_col = {"ISINISIN":"isin","Security":"security","CurrentBal":"currentbal"
+                      ,"FreeBal":"freebal","MarketPriceFaceValue":"marketpricefacevalue",
+                      "Value" : "value"}
+        df.rename(columns=rename_col, inplace=True)
+        df = df[["isin","security","currentbal","freebal","marketpricefacevalue","value"]]
         predefined_data["CDSLHoldings"] = dataframe_to_dict(df)
     elif df.columns[0] == "SchemeName":
         df.dropna(subset=["SchemeName"], inplace=True)
@@ -143,3 +148,4 @@ def save_and_extract(filepath):
     """Save uploaded PDF and extract tables."""
     response = extract_pdf_data(filepath)
     process_tables(response)
+    return predefined_data

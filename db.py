@@ -64,29 +64,67 @@ def read_predefined_data():
     return pdata
 # print(read_predefined_data())
 
-def add_data():
-    pdata = read_predefined_data()
-    user_id = insert_data(TABLES[0],[pdata["client_info"]], primary_key="user_id")
-    print("got user id",user_id)
-    acc_value = pdata["accounts"]
-    for v in acc_value:
-        v.update({"user_id" : user_id})
-    for accs in acc_value:
-        acc_id = insert_data(TABLES[1],[accs], primary_key="account_id")
-        print("got acc id",acc_id)
-    print("insert bulk data")
-    acc_value = pdata["asset_allocation"]
-    for v in acc_value:
-        v.update({"user_id" : user_id})
-    insert_data(TABLES[2],acc_value, primary_key="user_id")
-    print("insert bulk data")
-    acc_value = pdata["portfolio"]
-    for v in acc_value:
-        v.update({"user_id" : user_id})
-    insert_data(TABLES[3],acc_value, primary_key="user_id")
-    print("insert bulk data")
-    # acc_value = pdata["portfolio"]
-    # insert_data_bulk(TABLES[3], acc_value)
+def add_data(pdata):
+    # pdata = read_predefined_data()
+    try:
+        user_id = insert_data(TABLES[0],[pdata["client_info"]], primary_key="user_id")
+        print("got user id",user_id)
+        acc_value = pdata["accounts"]
+        for v in acc_value:
+            v.update({"user_id" : user_id})
+        for accs in acc_value:
+            acc_id = insert_data(TABLES[1],[accs], primary_key="account_id")
+            print("got acc id",acc_id)
+        print("insert bulk data")
+        acc_value = pdata["asset_allocation"]
+        for v in acc_value:
+            v.update({"user_id" : user_id})
+        insert_data(TABLES[2],acc_value, primary_key="user_id")
+        print("insert bulk data")
+        acc_value = pdata["portfolio"]
+        for v in acc_value:
+            v.update({"user_id" : user_id})
+        insert_data(TABLES[3],acc_value, primary_key="user_id")
+        print("insert bulk data")
+        acc_value = pdata["CDSLHoldings"]
+        for v in acc_value:
+            v.update({"user_id" : user_id})
+        insert_data(TABLES[4], acc_value, primary_key="user_id")
+        return True
+    except Exception as err:
+        print("Error while inserting data : ", err)
+        return None
 
-add_data()
-    
+# add_data()
+def call_stored_procedure_multi(user_id):
+    session = SessionLocal()
+    try:
+        with session.connection() as conn:
+            result = conn.execute(text("EXEC cas_get_data :user_id"), {"user_id": user_id})
+            
+            results = []
+            cursor = result.cursor  # Get raw DBAPI cursor
+            
+            while cursor:
+                rows = cursor.fetchall()
+                if rows:  # Avoid appending empty sets
+                    results.append(rows)
+                
+                if not cursor.nextset():  # Move to the next result set
+                    break
+
+            return results
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
+    finally:
+        session.close()
+
+# # Call the stored procedure
+# user_id = 22
+# data = call_stored_procedure_multi(user_id)
+
+# # Print all result sets
+# for idx, table in enumerate(data, start=1):
+#     print(f"Table {idx}: {table}")
+
