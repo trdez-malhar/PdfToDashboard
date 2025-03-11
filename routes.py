@@ -4,7 +4,7 @@ from flask import Flask, request, render_template, jsonify, Blueprint
 from config import UPLOAD_FOLDER
 from utils.file_handler import allowed_file
 from utils.pdf_processor import save_and_extract, get_dashboard_data
-from db import insert_data_bulk
+from db import insert_data, read_predefined_data
 
 # api_routes.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
@@ -13,12 +13,12 @@ api_routes = Blueprint("api_routes", __name__)
 
 @api_routes.route("/dashboard")
 def dashboard():
-    data = get_dashboard_data()
-    status = insert_data_bulk(table_name="cas_users",records=[{"name" : data["client_info"]["name"]}])
+    # data = get_dashboard_data()
+    status = read_predefined_data()
+    # status = insert_data_bulk(table_name="cas_users",records=[{"name" : data["client_info"]["name"]}])
     if status:
-        if status > 0:
-            return jsonify(data)
-        return jsonify({"status": "error", "message": "Failed to insert data into the database."})
+        return jsonify(status)
+    # return jsonify({"status": "error", "message": "Failed to insert data into the database."})
     return jsonify({"status": "error", "message": "Failed to insert data into the database."})
 
 @api_routes.route("/upload", methods=["POST"])

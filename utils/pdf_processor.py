@@ -10,12 +10,13 @@ from docling.datamodel.base_models import InputFormat
 from utils.file_handler import dataframe_to_dict, clean_strings
 from config import EXTRACTED_TABLES
 from .external_data import get_isin_data, get_company_profile
+from datetime import datetime
 
 # Predefined Data Structure
 predefined_data = {
     "client_info": {"name": None},
     "accounts": None,
-    "portfolio": {"month_wise": None},
+    "portfolio": None,
     "asset_allocation": None,
     "CDSLHoldings": None,
     "MFHoldings": None,
@@ -38,8 +39,6 @@ def clean_nav(value):
             return float(numbers[0] + numbers[1])  
         elif numbers:
             return float(numbers[0])  # If only one valid number, return it
-        
-
     return value  # Return NaN as is
 
 def get_dashboard_data():
@@ -101,19 +100,37 @@ def process_tables(response):
         timestamp = int(time.time())
         csv_filename = f"extracted_table_{i+1}_{timestamp}.csv"
         df.to_csv(f"{EXTRACTED_TABLES}/{csv_filename}", index=False)
-
+        df.replace("", pd.NA, inplace=True)
         if i == 0:
             predefined_data["client_info"]["name"] = df["NameJointNames"][0]
         elif i == 1:
+            rename_columns = {"AccountType" : "name", "AccountDetails":"details",
+                              "NoofISINsSchemesISIN" : "num_isin_scheme",
+                              "Valuein" : "value"
+                              }
+            df.rename(columns=rename_columns, inplace=True)
+            df.dropna(subset=["name"], inplace=True)
+            df["num_isin_scheme"] = df["num_isin_scheme"].str.replace(",", "").astype(float)
+            df["value"] = df["value"].str.replace(",", "").astype(float)
+            df.reset_index(drop=True, inplace=True)  
             predefined_data["accounts"] = dataframe_to_dict(df)
         elif i == 2:
             df["PortfolioValuationIn"] = df["PortfolioValuationIn"].str.replace(",", "").astype(float)
+            df = df[["MonthYear","PortfolioValuationIn"]]
             df.sort_values(by='PortfolioValuationIn', inplace=True, ascending=True)
-            df.reset_index(drop=True, inplace=True)         
-            predefined_data["portfolio"]["month_wise"] = dataframe_to_dict(df)
+            df.reset_index(drop=True, inplace=True)  
+            df.rename(columns={"PortfolioValuationIn" : "value"}, inplace=True)
+                        # Convert MonthYear column to datetime format
+            df['MonthYear'] = pd.to_datetime(df['MonthYear'], format="%b %Y")
+            # Extract full month name and year
+            df['month'] = df['MonthYear'].dt.strftime('%B')  # Full month name (e.g., 'April')
+            df['year'] = df['MonthYear'].dt.year  # Extract year
+            df = df[["month", "year", "value"]]
+            predefined_data["portfolio"] = dataframe_to_dict(df)
         elif i == 3:
-            df["Value"] = df["Value"].str.replace(",", "").astype(float)
+            df["Value"] = df["Value"].str.replace(",", "").astype(float)            
             df = df[df['AssetClass'] != 'Total']
+            df.rename(columns={"AssetClass" : "name"}, inplace=True)
             predefined_data["asset_allocation"] = dataframe_to_dict(df)
         elif i > 4:
             process_holdings_data(df)

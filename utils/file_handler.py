@@ -12,7 +12,7 @@ def dataframe_to_dict(df):
     """Convert a DataFrame to a nested dictionary."""
     dict_key_column = df.columns[0]
     df = df.dropna(subset=[dict_key_column])
-    return {row[dict_key_column]: row.drop(dict_key_column).to_dict() for _, row in df.iterrows()}
+    return [row.to_dict() for _, row in df.iterrows()]
 
 def clean_strings(strings):
     """Clean column names by removing non-alphabetic characters."""
