@@ -181,3 +181,4 @@ uploads/
 *.json
 *.pdf
 
+.ipynb
