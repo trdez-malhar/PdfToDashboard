@@ -1,12 +1,15 @@
 import json
 import time
 import fitz  # PyMuPDF
+import re
+import numpy as np
 import pandas as pd
 from docling.datamodel.pipeline_options import PdfPipelineOptions
 from docling.document_converter import DocumentConverter, PdfFormatOption
 from docling.datamodel.base_models import InputFormat
 from utils.file_handler import dataframe_to_dict, clean_strings
 from config import EXTRACTED_TABLES
+from .external_data import get_isin_data, get_company_profile
 
 # Predefined Data Structure
 predefined_data = {
@@ -17,6 +20,28 @@ predefined_data = {
     "CDSLHoldings": None,
     "MFHoldings": None,
 }
+
+# Function to clean NAV column
+def clean_nav(value):
+    if isinstance(value, str):
+        # Remove soft hyphens and unwanted spaces/dashes
+        value = value.replace("\xad", "").replace("­", "").replace("-", " ")
+        
+        # Extract numeric parts
+        numbers = re.findall(r'\d+\.\d+|\d+', value)
+
+        if len(numbers) == 2:
+            # Case 1: "642.901 306.2378" -> Keep only the second part (306.2378)
+            if "." in numbers[1]:  
+                return float(numbers[1])
+            # Case 2: "1379.4 304" -> Merge correctly into "1379.4304"
+            return float(numbers[0] + numbers[1])  
+        elif numbers:
+            return float(numbers[0])  # If only one valid number, return it
+        
+
+    return value  # Return NaN as is
+
 def get_dashboard_data():
     return predefined_data
 def extract_pdf_data(source: str):
@@ -30,27 +55,34 @@ def extract_pdf_data(source: str):
         format_options={InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)}
     )
     result = converter.convert(source)
+    result = result.document.export_to_dict()
 
-    with open("extracted_data.json", "w", encoding="utf-8") as fp:
-        json.dump(result.document.export_to_dict(), fp, indent=4)
+    return result
+    # with open("extracted_data.json", "w", encoding="utf-8") as fp:
+    #     json.dump(result.document.export_to_dict(), fp, indent=4)
 
 def process_holdings_data(df):
     """Process CDSL and Mutual Fund holdings data."""
     df.replace("", pd.NA, inplace=True)
     if df.columns[0] == "ISINISIN":
         df.dropna(subset=["ISINISIN"], inplace=True)
+        cols_to_convert = ["CurrentBal", "FreeBal", "MarketPriceFaceValue", "Value"]
+        df[cols_to_convert] = df[cols_to_convert].replace(",", "", regex=True).apply(pd.to_numeric)
+        df.dropna(subset=["CurrentBal", "FreeBal", "MarketPriceFaceValue", "Value"], inplace=True)
+        df.reset_index(drop=True, inplace=True)
+        isin_list = df["ISINISIN"].tolist()
+        isin_data = [get_isin_data(isin) for isin in isin_list]
+        df["Symbol"] = isin_data
+        df["Industry"] = [get_company_profile(symbol) for symbol in isin_data]
         predefined_data["CDSLHoldings"] = dataframe_to_dict(df)
     elif df.columns[0] == "SchemeName":
         df.dropna(subset=["SchemeName"], inplace=True)
         df.drop(df[df["SchemeName"] == "Grand Total"].index, inplace=True)
         predefined_data["MFHoldings"] = dataframe_to_dict(df)
 
-def process_tables():
+def process_tables(response):
     """Process extracted tables and update predefined_data."""
-    with open("extracted_data.json", "r", encoding="utf-8") as fp:
-        json_data = json.load(fp)
-
-    for i, table_data in enumerate(json_data.get("tables", [])):
+    for i, table_data in enumerate(response.get("tables", [])):
         raw_data = table_data["data"]["table_cells"]
         max_columns = max(cell["start_col_offset_idx"] + cell["col_span"] for cell in raw_data)
 
@@ -75,8 +107,13 @@ def process_tables():
         elif i == 1:
             predefined_data["accounts"] = dataframe_to_dict(df)
         elif i == 2:
+            df["PortfolioValuationIn"] = df["PortfolioValuationIn"].str.replace(",", "").astype(float)
+            df.sort_values(by='PortfolioValuationIn', inplace=True, ascending=True)
+            df.reset_index(drop=True, inplace=True)         
             predefined_data["portfolio"]["month_wise"] = dataframe_to_dict(df)
         elif i == 3:
+            df["Value"] = df["Value"].str.replace(",", "").astype(float)
+            df = df[df['AssetClass'] != 'Total']
             predefined_data["asset_allocation"] = dataframe_to_dict(df)
         elif i > 4:
             process_holdings_data(df)
@@ -87,5 +124,5 @@ def process_tables():
 
 def save_and_extract(filepath):
     """Save uploaded PDF and extract tables."""
-    extract_pdf_data(filepath)
-    process_tables()
+    response = extract_pdf_data(filepath)
+    process_tables(response)
