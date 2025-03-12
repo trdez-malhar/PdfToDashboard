@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL
-
+from decimal import Decimal
 TABLES = ["cas_users", "cas_users_accounts",
           "cas_asset_allocation", "cas_portfolio_performance", 
           "cas_cdsl_holdings"]
@@ -101,15 +101,16 @@ def call_stored_procedure_multi(user_id):
     try:
         with session.connection() as conn:
             result = conn.execute(text("EXEC cas_get_data :user_id"), {"user_id": user_id})
-            
             results = []
             cursor = result.cursor  # Get raw DBAPI cursor
-            
+
             while cursor:
+                columns = [desc[0] for desc in cursor.description]  # Extract column names
                 rows = cursor.fetchall()
+
                 if rows:  # Avoid appending empty sets
-                    results.append(rows)
-                
+                    results.append([dict(zip(columns, row)) for row in rows])
+
                 if not cursor.nextset():  # Move to the next result set
                     break
 
@@ -120,11 +121,27 @@ def call_stored_procedure_multi(user_id):
     finally:
         session.close()
 
-# # Call the stored procedure
-# user_id = 22
-# data = call_stored_procedure_multi(user_id)
+# Call the stored procedure
 
-# # Print all result sets
-# for idx, table in enumerate(data, start=1):
-#     print(f"Table {idx}: {table}")
+def get_dashboard_data(user_id):
+    
+    predefined_data = {
+        "client_info": {"name": None},
+        "accounts": None,
+        "asset_allocation": None,
+        "portfolio": None,
+        "CDSLHoldings": None,
+        "MFHoldings": None,
+    }
+    cas_data = call_stored_procedure_multi(user_id)
+    predefined_data["client_info"] = cas_data[0]
+    predefined_data["accounts"] = cas_data[1]
+    predefined_data["asset_allocation"] = cas_data[2]
+    predefined_data["portfolio"] = cas_data[3]
+    predefined_data["CDSLHoldings"] = cas_data[4]
+    print(predefined_data)
+    import json
+    with open("newstruct_data.json", mode="w", encoding="utf-8") as fp:
+        json.dump(predefined_data, fp, indent=4, default=lambda x: float(x) if isinstance(x, Decimal) else x)
 
+get_dashboard_data(24)
