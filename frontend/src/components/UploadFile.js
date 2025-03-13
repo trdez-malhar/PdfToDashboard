@@ -51,6 +51,7 @@ const UploadFile = () => {
     try {
       const response = await axios.post("http://127.0.0.1:5000/api/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true, // Ensure cookies (session) are sent
       });
 
       clearInterval(interval);
@@ -58,8 +59,15 @@ const UploadFile = () => {
 
       if (response.data.status === "error") {
         setStatus(response.data.message);
-      } else {
-        setStatus("Upload complete! Redirecting...");
+      }  
+      else if (response.data.status === "success") {
+        const userId = response.data.session_id; // Get user_id from response
+  
+        // ✅ Save user ID in localStorage
+        localStorage.setItem("session_id", userId);
+  
+        console.log("User ID saved:", userId);
+        setStatus("Upload successful! Redirecting...");
         setTimeout(() => {
             navigate("/dashboard"); // Use React Router navigation
         }, 1000);

@@ -41,12 +41,10 @@ def clean_nav(value):
             return float(numbers[0])  # If only one valid number, return it
     return value  # Return NaN as is
 
-def get_dashboard_data():
-    return predefined_data
 def extract_pdf_data(source: str):
     """Extract data from a PDF using DocumentConverter."""
     pipeline_options = PdfPipelineOptions(
-        do_ocr=False,  
+        do_ocr=True,  
         do_table_structure=True,
         table_detection_mode="lattice",
     )
@@ -81,7 +79,22 @@ def process_holdings_data(df):
         predefined_data["CDSLHoldings"] = dataframe_to_dict(df)
     elif df.columns[0] == "SchemeName":
         df.dropna(subset=["SchemeName"], inplace=True)
-        df.drop(df[df["SchemeName"] == "Grand Total"].index, inplace=True)
+        df = df[df["SchemeName"] != "Grand Total"]
+        df.columns = df.columns.str.lower()
+        rename_col = {df.columns[len(df.columns) - 3]: "averagetotalexpenseratio",
+                      df.columns[len(df.columns) - 1]: "grosscommissionpaidtodistributors",
+                      df.columns[len(df.columns) - 5] : "cumulativeamountinvested"}
+        df.rename(columns = rename_col, inplace=True)
+        
+        df = df[['schemename', 'isin', 'nav',
+       'cumulativeamountinvested', 'valuation',
+       'averagetotalexpenseratio',
+       'grosscommissionpaidtodistributors']]
+        print(df.columns)
+        df["nav"] = df["nav"].apply(clean_nav)
+        cols_to_convert = [ "cumulativeamountinvested", "valuation", 
+                           "averagetotalexpenseratio","grosscommissionpaidtodistributors"]
+        df[cols_to_convert] = df[cols_to_convert].replace(",", "", regex=True).apply(pd.to_numeric)
         predefined_data["MFHoldings"] = dataframe_to_dict(df)
 
 def process_tables(response):
@@ -109,6 +122,11 @@ def process_tables(response):
         if i == 0:
             predefined_data["client_info"]["name"] = df["NameJointNames"][0]
         elif i == 1:
+            if "Account Type" in df.iloc[0,0]:
+               df.columns = df.iloc[0]  # Set new headers
+               df = df[1:].reset_index(drop=True)
+               print(df.columns)
+               df.columns = clean_strings(df.columns.tolist())
             rename_columns = {"AccountType" : "name", "AccountDetails":"details",
                               "NoofISINsSchemesISIN" : "num_isin_scheme",
                               "Valuein" : "value"
@@ -120,6 +138,9 @@ def process_tables(response):
             df.reset_index(drop=True, inplace=True)  
             predefined_data["accounts"] = dataframe_to_dict(df)
         elif i == 2:
+            if "Portfolio" in df.columns[1]:
+                rename_columns = {df.columns[1] : "PortfolioValuationIn"}
+                df.rename(columns=rename_columns, inplace=True)
             df["PortfolioValuationIn"] = df["PortfolioValuationIn"].str.replace(",", "").astype(float)
             df = df[["MonthYear","PortfolioValuationIn"]]
             df.sort_values(by='PortfolioValuationIn', inplace=True, ascending=True)

@@ -1,6 +1,7 @@
 import os
 from sqlalchemy.engine.url import URL
 
+
 # Constants
 UPLOAD_FOLDER = "uploads"
 EXTRACTED_TABLES = "data/extracted_tables"

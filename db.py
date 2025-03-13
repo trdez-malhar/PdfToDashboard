@@ -2,9 +2,10 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from config import DB_URL
 from decimal import Decimal
+import json
 TABLES = ["cas_users", "cas_users_accounts",
           "cas_asset_allocation", "cas_portfolio_performance", 
-          "cas_cdsl_holdings"]
+          "cas_cdsl_holdings","cas_mf_holdings"]
 
 # # Create database engine
 engine = create_engine(DB_URL, echo=False, isolation_level="AUTOCOMMIT", connect_args={"timeout": 10})
@@ -38,7 +39,7 @@ def insert_data(table_name, records, primary_key=None):
             sql = text(f"INSERT INTO {table_name} ({columns}) OUTPUT INSERTED.{primary_key} VALUES ({placeholders})")
             result = session.execute(sql, records)
             inserted_id = result.scalar()
-            print(f"Inserted ID ({primary_key}):", inserted_id)
+            # print(f"Inserted ID ({primary_key}):", inserted_id)
             session.commit()
             return inserted_id  
 
@@ -46,7 +47,7 @@ def insert_data(table_name, records, primary_key=None):
         sql = text(f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})")
         result = session.execute(sql, records)
         session.commit()
-        print(f"{result.rowcount} records inserted successfully!")
+        # print(f"{result.rowcount} records inserted successfully!")
         return result.rowcount  
 
     except Exception as e:
@@ -67,30 +68,47 @@ def read_predefined_data():
 def add_data(pdata):
     # pdata = read_predefined_data()
     try:
-        user_id = insert_data(TABLES[0],[pdata["client_info"]], primary_key="user_id")
-        print("got user id",user_id)
-        acc_value = pdata["accounts"]
-        for v in acc_value:
-            v.update({"user_id" : user_id})
-        for accs in acc_value:
-            acc_id = insert_data(TABLES[1],[accs], primary_key="account_id")
-            print("got acc id",acc_id)
-        print("insert bulk data")
-        acc_value = pdata["asset_allocation"]
-        for v in acc_value:
-            v.update({"user_id" : user_id})
-        insert_data(TABLES[2],acc_value, primary_key="user_id")
-        print("insert bulk data")
-        acc_value = pdata["portfolio"]
-        for v in acc_value:
-            v.update({"user_id" : user_id})
-        insert_data(TABLES[3],acc_value, primary_key="user_id")
-        print("insert bulk data")
-        acc_value = pdata["CDSLHoldings"]
-        for v in acc_value:
-            v.update({"user_id" : user_id})
-        insert_data(TABLES[4], acc_value, primary_key="user_id")
-        return True
+        user_id = insert_data(TABLES[0], [pdata["client_info"]], primary_key="user_id")
+        # print("got user id", user_id)
+        # Insert accounts if data exists
+        acc_value = pdata.get("accounts", [])
+        if acc_value:
+            for v in acc_value:
+                v.update({"user_id": user_id})
+            insert_data(TABLES[1], acc_value)
+
+        # Insert asset allocation if data exists
+        acc_value = pdata.get("asset_allocation", [])
+        if acc_value:
+            for v in acc_value:
+                v.update({"user_id": user_id})
+            insert_data(TABLES[2], acc_value)
+            # print("inserted asset allocation data")
+
+        # Insert portfolio if data exists
+        acc_value = pdata.get("portfolio", [])
+        if acc_value:
+            for v in acc_value:
+                v.update({"user_id": user_id})
+            insert_data(TABLES[3], acc_value)
+            # print("inserted portfolio data")
+
+        # Insert CDSL Holdings if data exists
+        acc_value = pdata.get("CDSLHoldings", [])
+        if acc_value:
+            for v in acc_value:
+                v.update({"user_id": user_id})
+            insert_data(TABLES[4], acc_value)
+            # print("inserted CDSL Holdings data")
+        acc_value = pdata.get("MFHoldings", [])
+        if acc_value:
+            for v in acc_value:
+                v.update({"user_id": user_id})
+            insert_data(TABLES[5], acc_value)
+            # print("inserted CDSL Holdings data")
+
+        return user_id
+
     except Exception as err:
         print("Error while inserting data : ", err)
         return None
@@ -134,14 +152,14 @@ def get_dashboard_data(user_id):
         "MFHoldings": None,
     }
     cas_data = call_stored_procedure_multi(user_id)
-    predefined_data["client_info"] = cas_data[0]
-    predefined_data["accounts"] = cas_data[1]
-    predefined_data["asset_allocation"] = cas_data[2]
-    predefined_data["portfolio"] = cas_data[3]
-    predefined_data["CDSLHoldings"] = cas_data[4]
-    print(predefined_data)
-    import json
-    with open("newstruct_data.json", mode="w", encoding="utf-8") as fp:
-        json.dump(predefined_data, fp, indent=4, default=lambda x: float(x) if isinstance(x, Decimal) else x)
+    keys = ["client_info", "accounts", "asset_allocation", "portfolio", "CDSLHoldings", "MFHoldings"]
 
-get_dashboard_data(24)
+# Ensure predefined_data is populated only for available keys in cas_data
+    for index in range(min(len(cas_data), len(keys))):
+        predefined_data[keys[index]] = cas_data[index]
+
+    # print(predefined_data)
+   
+    return json.dumps(predefined_data, default=lambda x: float(x) if isinstance(x, Decimal) else x)
+
+# get_dashboard_data(24)

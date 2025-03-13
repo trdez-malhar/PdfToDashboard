@@ -3,8 +3,13 @@ from flask_cors import CORS
 from routes import api_routes  # Importing routes
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "*"}})  # Allow frontend to call API
+CORS(app, resources={r"/api/*": {"origins": "*"}},supports_credentials=True)  # Allow frontend to call API
+app.secret_key = "TRDEZ1210QWERTY"  # Set a secret key for session management
 
+UPLOAD_FOLDER = "uploads"
+# Ensure session works properly
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
 # Register routes
 app.register_blueprint(api_routes, url_prefix="/api")
 

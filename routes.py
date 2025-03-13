@@ -1,25 +1,24 @@
 import os
 import fitz  # PyMuPDF
-from flask import Flask, request, render_template, jsonify, Blueprint
+from flask import request, render_template, jsonify, Blueprint, Response, session
 from config import UPLOAD_FOLDER
 from utils.file_handler import allowed_file
-from utils.pdf_processor import save_and_extract, get_dashboard_data
-from db import read_predefined_data, add_data
+from utils.pdf_processor import save_and_extract
+from db import read_predefined_data, add_data, get_dashboard_data
 
 # api_routes.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 api_routes = Blueprint("api_routes", __name__)
 # Constants
 
-@api_routes.route("/dashboard")
-def dashboard():
-    # data = get_dashboard_data()
-    status = read_predefined_data()
-    # status = insert_data_bulk(table_name="cas_users",records=[{"name" : data["client_info"]["name"]}])
-    if status:
-        return jsonify(status)
-    # return jsonify({"status": "error", "message": "Failed to insert data into the database."})
-    return jsonify({"status": "error", "message": "Failed to insert data into the database."})
+@api_routes.route("/dashboard/<int:user_id>")
+def dashboard(user_id):
+    if user_id:
+        print(user_id)
+        data = get_dashboard_data(user_id)
+        if data:
+            return Response(data, content_type="application/json")
+    return jsonify(None)
 
 @api_routes.route("/upload", methods=["POST"])
 def upload_file():
@@ -47,6 +46,14 @@ def upload_file():
             return jsonify({"status": "error", "message": f"PDF validation failed: {str(e)}"})
 
         predefined_data = save_and_extract(filepath)
-        if add_data(predefined_data):
-            return jsonify({"status": "success", "message": f"File uploaded successfully: {file.filename}"})
+        user_id = add_data(predefined_data)
+        if user_id:
+            print(user_id)
+            session["user_id"] = user_id  # Save user_id in session
+            print(session["user_id"])
+            return jsonify({
+                "status": "success",
+                "message": f"File uploaded successfully: {file.filename}",
+                "session_id": user_id
+            })
     return jsonify({"status": "error", "message": "Invalid file format. Only PDFs allowed."})
