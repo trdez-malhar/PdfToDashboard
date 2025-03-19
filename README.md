@@ -6,6 +6,7 @@ Ensure you have the following dependencies installed:
 
 - Python 3.x
 - Flask
+- Nodejs
 
 ## Installation
 
@@ -29,6 +30,7 @@ Ensure you have the following dependencies installed:
 
 ## Usage
 
+For Backend
 1. Run the application:
    ```sh
    flask run
@@ -37,7 +39,24 @@ Ensure you have the following dependencies installed:
    ```sh
    python app.py
    ```
-3. Open your browser and visit:
+2. Open your browser and visit:
    ```
    http://127.0.0.1:5000/
+   ```
+
+For Frontend
+
+1. Navigate to the project directory:
+   ```sh
+   cd frontend
+   ```
+
+2. Run the application:
+   ```sh
+   npm start
+   ```
+   
+3. Open your browser and visit:
+   ```
+   http://localhost:3000
    ```
