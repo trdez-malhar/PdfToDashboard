@@ -53,10 +53,10 @@ def extract_pdf_data(source: str):
     )
     result = converter.convert(source)
     result = result.document.export_to_dict()
+    with open(f"extracted_data_{int(time.time())}.json", "w", encoding="utf-8") as fp:
+        json.dump(result, fp, indent=4)
 
     return result
-    # with open("extracted_data.json", "w", encoding="utf-8") as fp:
-    #     json.dump(result.document.export_to_dict(), fp, indent=4)
 
 def process_holdings_data(df):
     """Process CDSL and Mutual Fund holdings data."""
@@ -125,13 +125,15 @@ def process_tables(response):
             if "Account Type" in df.iloc[0,0]:
                df.columns = df.iloc[0]  # Set new headers
                df = df[1:].reset_index(drop=True)
-               print(df.columns)
+               print("inside ",df.columns)
                df.columns = clean_strings(df.columns.tolist())
-            rename_columns = {"AccountType" : "name", "AccountDetails":"details",
-                              "NoofISINsSchemesISIN" : "num_isin_scheme",
-                              "Valuein" : "value"
-                              }
+               
+            df.columns = clean_strings(df.columns.tolist())
+            new_values = ["name", "details", "num_isin_scheme", "value"]
+            rename_columns = dict(zip(df.columns, new_values))
+            print(rename_columns)
             df.rename(columns=rename_columns, inplace=True)
+            print(df)
             df.dropna(subset=["name"], inplace=True)
             df["num_isin_scheme"] = df["num_isin_scheme"].str.replace(",", "").astype(float)
             df["value"] = df["value"].str.replace(",", "").astype(float)
