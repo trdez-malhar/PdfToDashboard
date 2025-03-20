@@ -1,5 +1,6 @@
 import time
 import pandas as pd
+
 def restructure_data(table_data : list):
     """para list of tables"""
     result = {"table_layout" : [], "table_grid_layout" : []}
@@ -52,12 +53,12 @@ def restructure_data(table_data : list):
 
 def transform(result_data):
     table_level_df = pd.DataFrame(result_data["table_layout"])
-    save(table_level_df, "table_level")
+    # save(table_level_df, "table_level")
     transform_data_df = clean_up(result_data)
     #table name mapping
     # Predefined table mapping for known table_no values (0-4)
     transform_data_df = table_name_mapping(transform_data_df)
-    save(transform_data_df, "cell_level")
+    # save(transform_data_df, "cell_level")
     # Aggregate table features
     table_df = aggregate_table_cell_data(transform_data_df)
     # Flatten MultiIndex column names
@@ -66,9 +67,9 @@ def transform(result_data):
     merged_df = table_level_df.merge(table_df, on=['page_no', 'table_no'], how='left')
     return merged_df
 
-def save(df, type):
-    timestamp = time.time_ns()
-    df.to_csv(f"{OUTPUT_CLEAN_FOLDER}{timestamp}_{type}.csv", index=False)
+# def save(df, type):
+#     timestamp = time.time_ns()
+#     df.to_csv(f"{OUTPUT_CLEAN}{timestamp}_{type}.csv", index=False)
 
 def flatten_multiindex(table_df):
     table_df.columns = ['_'.join(col).strip() if isinstance(col, tuple) else col for col in table_df.columns]

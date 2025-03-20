@@ -1,11 +1,12 @@
 import os
 from sqlalchemy.engine.url import URL
 
-def set_config():
-
 # Constants
 UPLOAD_FOLDER = "data/uploads"
 EXTRACTED_TABLES = "data/extracted_tables"
+OUTPUT_CLEAN = "data/clean"
+OUTPUT_CLEAN_PDF = "data/raw/train/pdf"
+OUTPUT_CLEAN_TABLES = "data/raw/train/tables"
 ALLOWED_EXTENSIONS = {"pdf"}
 
 # Ensure required directories exist

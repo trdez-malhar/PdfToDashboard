@@ -11,7 +11,7 @@ from utils.file_handler import dataframe_to_dict, clean_strings
 from config import EXTRACTED_TABLES
 from .external_data import get_isin_data, get_company_profile
 from datetime import datetime
-
+from utils.extraction import extract_pdf_data
 # Predefined Data Structure
 predefined_data = {
     "client_info": {"name": None},
@@ -41,22 +41,22 @@ def clean_nav(value):
             return float(numbers[0])  # If only one valid number, return it
     return value  # Return NaN as is
 
-def extract_pdf_data(source: str):
-    """Extract data from a PDF using DocumentConverter."""
-    pipeline_options = PdfPipelineOptions(
-        do_ocr=True,  
-        do_table_structure=True,
-        table_detection_mode="lattice",
-    )
-    converter = DocumentConverter(
-        format_options={InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)}
-    )
-    result = converter.convert(source)
-    result = result.document.export_to_dict()
-    with open(f"extracted_data_{int(time.time())}.json", "w", encoding="utf-8") as fp:
-        json.dump(result, fp, indent=4)
+# def extract_pdf_data(source: str):
+#     """Extract data from a PDF using DocumentConverter."""
+#     pipeline_options = PdfPipelineOptions(
+#         do_ocr=True,  
+#         do_table_structure=True,
+#         table_detection_mode="lattice",
+#     )
+#     converter = DocumentConverter(
+#         format_options={InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)}
+#     )
+#     result = converter.convert(source)
+#     result = result.document.export_to_dict()
+#     with open(f"extracted_data_{int(time.time())}.json", "w", encoding="utf-8") as fp:
+#         json.dump(result, fp, indent=4)
 
-    return result
+#     return result
 
 def process_holdings_data(df):
     """Process CDSL and Mutual Fund holdings data."""

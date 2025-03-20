@@ -9,10 +9,15 @@ import joblib
 df = pd.read_csv("/content/sample_data/cell_level_train.csv")  # Change to your file path if needed
 df = df.drop_duplicates(keep="first")
 label_encoder = LabelEncoder()
-df["table_name"] = label_encoder.fit_transform(df["table_name"])  # Encode table types
+if "table_name" in df.columns:
+	df["table_name"] = label_encoder.fit_transform(df["table_name"])  # Encode table types
+else:
+	raise KeyError("Column 'table_name' does not exist in the dataset")
 # Save label mappings for debugging
 label_mapping = dict(zip(label_encoder.transform(label_encoder.classes_), label_encoder.classes_))
-print("🔹 LabelEncoder Mapping (Train):", label_mapping)
+columns_to_drop = ["table_name", "coord_origin", "row_section", "text"]
+existing_columns_to_drop = [col for col in columns_to_drop if col in df.columns]
+X = df.drop(columns=existing_columns_to_drop)  # Features (excluding target)
 
 # Define features (X) and target (y)
 X = df.drop(columns=["table_name", 'coord_origin','row_section', 'text'])  # Features (excluding target)
