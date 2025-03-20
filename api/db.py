@@ -58,12 +58,6 @@ def insert_data(table_name, records, primary_key=None):
         session.close()
 
 
-def read_predefined_data():
-    import json
-    with open(r"C:\Users\malhar.yadav\scripts\PdfToDashboard\final_data_Shriraj Devidas Bhore.json", mode="r", encoding="utf-8") as fp:
-        pdata = json.loads(fp.read())
-    return pdata
-# print(read_predefined_data())
 
 def add_data(pdata):
     # pdata = read_predefined_data()

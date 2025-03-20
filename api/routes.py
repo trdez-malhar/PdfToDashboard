@@ -4,7 +4,7 @@ from flask import request, render_template, jsonify, Blueprint, Response, sessio
 from config import UPLOAD_FOLDER
 from utils.file_handler import allowed_file
 from utils.pdf_processor import save_and_extract
-from db import read_predefined_data, add_data, get_dashboard_data
+from db import add_data, get_dashboard_data
 
 # api_routes.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 

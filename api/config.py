@@ -1,9 +1,10 @@
 import os
 from sqlalchemy.engine.url import URL
 
+def set_config():
 
 # Constants
-UPLOAD_FOLDER = "uploads"
+UPLOAD_FOLDER = "data/uploads"
 EXTRACTED_TABLES = "data/extracted_tables"
 ALLOWED_EXTENSIONS = {"pdf"}
 

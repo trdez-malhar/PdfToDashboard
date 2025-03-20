@@ -6,7 +6,7 @@ app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}},supports_credentials=True)  # Allow frontend to call API
 app.secret_key = "TRDEZ1210QWERTY"  # Set a secret key for session management
 
-UPLOAD_FOLDER = "uploads"
+UPLOAD_FOLDER = "data/uploads"
 # Ensure session works properly
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
