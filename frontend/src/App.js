@@ -6,6 +6,7 @@ import Layout from "../src/components/layout";
 // Page components
 import UploadFile from "./components/UploadFile";
 import Dashboard from "./components/Dashboard";
+import Settings from "./components/settings";
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
         <Route path="/" element={<Layout />}>
           <Route index element={<UploadFile />} />
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>
     </Router>

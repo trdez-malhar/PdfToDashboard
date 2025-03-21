@@ -13,8 +13,11 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       {/* Sidebar Content (Only visible when open) */}
       {isOpen && (
         <ul style={styles.navList}>
+          <div>
+          
           <li><Link to="/dashboard" style={styles.link}>Dashboard</Link></li>
           <li><Link to="/settings" style={styles.link}>Settings</Link></li>
+          </div>
         </ul>
       )}
     </div>
@@ -23,8 +26,9 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
 const styles = {
   sidebar: {
+    // width: "250px", // Ensure it has width
     height: "100vh",
-    backgroundColor: "#333",
+    backgroundColor: "#222",
     color: "white",
     position: "fixed",
     top: "0",
@@ -32,6 +36,7 @@ const styles = {
     overflowX: "hidden",
     transition: "width 0.3s ease",
     paddingTop: "20px",
+    // zIndex: "9999", // Make sure sidebar is above everything
   },
   closeBtn: {
     position: "absolute",
@@ -45,14 +50,17 @@ const styles = {
   },
   navList: {
     listStyleType: "none",
-    padding: 0,
+    padding: "50px 0 0 20px", // Push list down
   },
   link: {
-    color: "white",
-    textDecoration: "none",
-    display: "block",
-    padding: "15px 20px",
-  },
+  color: "white", // Extreme contrast
+  textDecoration: "none",
+  display: "block",
+  padding: "15px 20px",
+  fontSize: "18px", // Make it more visible
+  fontWeight: "bold", // Improve visibility
+  visibility: "visible !important",
+},
 };
 
 export default Sidebar;

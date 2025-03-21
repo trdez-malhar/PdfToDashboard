@@ -18,7 +18,7 @@ const Navbar = ({ toggleSidebar }) => {
       {/* Right-side Icons */}
       <div style={styles.iconContainer}>
         <FaBell style={styles.icon} />
-        <FaCog style={styles.icon} />
+        <Link to="/settings"><FaCog style={styles.icon} /></Link>
         <div style={styles.profileIcon}></div>
       </div>
     </div>
@@ -66,14 +66,16 @@ const styles = {
   },
   icon: {
     color: "#555",
-    fontSize: "18px",
+    fontSize: "20px",
     cursor: "pointer",
+    marginBottom: "10px"
   },
   profileIcon: {
     width: "35px",
     height: "35px",
     borderRadius: "50%",
     backgroundColor: "#ccc",
+    // marginBottom: "10px"
   },
 };
 
