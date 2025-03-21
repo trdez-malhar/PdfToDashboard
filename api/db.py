@@ -62,6 +62,7 @@ def insert_data(table_name, records, primary_key=None):
 def add_data(pdata):
     # pdata = read_predefined_data()
     try:
+        print(pdata)
         user_id = insert_data(TABLES[0], [pdata["client_info"]], primary_key="user_id")
         # print("got user id", user_id)
         # Insert accounts if data exists
