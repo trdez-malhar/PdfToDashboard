@@ -1,0 +1,145 @@
+{
+    "client_info": {
+        "name": null
+    },
+    "accounts": null,
+    "portfolio": [
+        {
+            "month": "April",
+            "year": 2023,
+            "value": 34128.8
+        },
+        {
+            "month": "May",
+            "year": 2023,
+            "value": 36288.49
+        },
+        {
+            "month": "July",
+            "year": 2023,
+            "value": 38009.16
+        },
+        {
+            "month": "June",
+            "year": 2023,
+            "value": 38283.06
+        },
+        {
+            "month": "August",
+            "year": 2023,
+            "value": 38903.91
+        },
+        {
+            "month": "September",
+            "year": 2023,
+            "value": 72886.82
+        },
+        {
+            "month": "October",
+            "year": 2023,
+            "value": 73516.96
+        },
+        {
+            "month": "November",
+            "year": 2023,
+            "value": 81097.77
+        },
+        {
+            "month": "December",
+            "year": 2023,
+            "value": 92177.3
+        },
+        {
+            "month": "January",
+            "year": 2024,
+            "value": 95730.29
+        },
+        {
+            "month": "February",
+            "year": 2024,
+            "value": 100184.33
+        },
+        {
+            "month": "March",
+            "year": 2024,
+            "value": 101522.8
+        }
+    ],
+    "asset_allocation": [
+        {
+            "name": "Equity",
+            "Value": 61696.06,
+            "Percentage": "60.77"
+        },
+        {
+            "name": "Government Securities",
+            "Value": 6450.0,
+            "Percentage": "6.35"
+        },
+        {
+            "name": "Mutual Fund Folios",
+            "Value": 33016.35,
+            "Percentage": "32.52"
+        },
+        {
+            "name": "Mutual Funds Held in Demat Form",
+            "Value": 360.39,
+            "Percentage": "0.35"
+        }
+    ],
+    "CDSLHoldings": [
+        {
+            "isin": "INE084A01016",
+            "security": "BANK OF INDIA EQUITY SHARES",
+            "currentbal": 1.0,
+            "freebal": 1.0,
+            "marketpricefacevalue": 137.0,
+            "value": 137.0
+        },
+        {
+            "isin": "INE457A01014",
+            "security": "BANK OF MAHARASHTRA - EQUITY SHARES",
+            "currentbal": 3.0,
+            "freebal": 3.0,
+            "marketpricefacevalue": 62.29,
+            "value": 186.87
+        },
+        {
+            "isin": "INE016A01026",
+            "security": "DABUR INDIA LIMITED - EQUITY SHARES (FV RE.1/-)",
+            "currentbal": 1.0,
+            "freebal": 1.0,
+            "marketpricefacevalue": 523.15,
+            "value": 523.15
+        }
+    ],
+    "MFHoldings": [
+        {
+            "schemename": "D055A - SBI  Nifty Index Fund - Direct Plan - Growth",
+            "isin": "INF200K01TE8 28455236/0",
+            "nav": 203.7423,
+            "cumulativeamountinvested": 12500.0,
+            "valuation": 15266.82,
+            "averagetotalexpenseratio": 0.0,
+            "grosscommissionpaidtodistributors": 0.0
+        },
+        {
+            "schemename": "D079B - SBI Savings Fund - Direct Plan - Growth",
+            "isin": "INF200K01SZ5 28455236/0",
+            "nav": 40.4415,
+            "cumulativeamountinvested": 13000.0,
+            "valuation": 14074.13,
+            "averagetotalexpenseratio": 0.0,
+            "grosscommissionpaidtodistributors": 0.0
+        },
+        {
+            "schemename": "SRGP - SUNDARAM SERVICES FUND REGULAR GROWTH",
+            "isin": "INF903JA1EX7",
+            "nav": 27.9977,
+            "cumulativeamountinvested": 2900.0,
+            "valuation": 3675.4,
+            "averagetotalexpenseratio": 1.94,
+            "grosscommissionpaidtodistributors": 22.29
+        }
+    ]
+}

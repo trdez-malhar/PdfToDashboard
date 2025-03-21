@@ -1,0 +1,262 @@
+{
+    "client_info": {
+        "name": "Shriraj Devidas Bhore"
+    },
+    "accounts": [
+        {
+            "name": "CDSL Demat Account",
+            "details": "ANGEL ONE LIMITED DP Id: 12033200   Client Id :25422711",
+            "num_isin_scheme": 16.0,
+            "value": 68506.45
+        },
+        {
+            "name": "Mutual Fund Folios",
+            "details": "3 Folios",
+            "num_isin_scheme": 3.0,
+            "value": 33016.35
+        }
+    ],
+    "portfolio": [
+        {
+            "month": "April",
+            "year": 2023,
+            "value": 34128.8
+        },
+        {
+            "month": "May",
+            "year": 2023,
+            "value": 36288.49
+        },
+        {
+            "month": "July",
+            "year": 2023,
+            "value": 38009.16
+        },
+        {
+            "month": "June",
+            "year": 2023,
+            "value": 38283.06
+        },
+        {
+            "month": "August",
+            "year": 2023,
+            "value": 38903.91
+        },
+        {
+            "month": "September",
+            "year": 2023,
+            "value": 72886.82
+        },
+        {
+            "month": "October",
+            "year": 2023,
+            "value": 73516.96
+        },
+        {
+            "month": "November",
+            "year": 2023,
+            "value": 81097.77
+        },
+        {
+            "month": "December",
+            "year": 2023,
+            "value": 92177.3
+        },
+        {
+            "month": "January",
+            "year": 2024,
+            "value": 95730.29
+        },
+        {
+            "month": "February",
+            "year": 2024,
+            "value": 100184.33
+        },
+        {
+            "month": "March",
+            "year": 2024,
+            "value": 101522.8
+        }
+    ],
+    "asset_allocation": [
+        {
+            "name": "Equity",
+            "Value": 61696.06,
+            "Percentage": "60.77"
+        },
+        {
+            "name": "Government Securities",
+            "Value": 6450.0,
+            "Percentage": "6.35"
+        },
+        {
+            "name": "Mutual Fund Folios",
+            "Value": 33016.35,
+            "Percentage": "32.52"
+        },
+        {
+            "name": "Mutual Funds Held in Demat Form",
+            "Value": 360.39,
+            "Percentage": "0.35"
+        }
+    ],
+    "CDSLHoldings": [
+        {
+            "isin": "INE084A01016",
+            "security": "BANK OF INDIA EQUITY SHARES",
+            "currentbal": 1.0,
+            "freebal": 1.0,
+            "marketpricefacevalue": 137.0,
+            "value": 137.0
+        },
+        {
+            "isin": "INE457A01014",
+            "security": "BANK OF MAHARASHTRA - EQUITY SHARES",
+            "currentbal": 3.0,
+            "freebal": 3.0,
+            "marketpricefacevalue": 62.29,
+            "value": 186.87
+        },
+        {
+            "isin": "INE016A01026",
+            "security": "DABUR INDIA LIMITED - EQUITY SHARES (FV RE.1/-)",
+            "currentbal": 1.0,
+            "freebal": 1.0,
+            "marketpricefacevalue": 523.15,
+            "value": 523.15
+        },
+        {
+            "isin": "INE512B01022",
+            "security": "FCS SOFTWARE SOLUTIONS LIMITED - NEW EQUITY SHARE OF RE 1/- AFTER SPLIT",
+            "currentbal": 44.0,
+            "freebal": 44.0,
+            "marketpricefacevalue": 3.66,
+            "value": 161.04
+        },
+        {
+            "isin": "IN0020210236",
+            "security": "GOVT OF INDIA#2.5% SGB 2021-22 SERIES IX 2030-LOAN CODE 31268 - RED DT 18.01.2030",
+            "currentbal": 1.0,
+            "freebal": 1.0,
+            "marketpricefacevalue": 6450.0,
+            "value": 6450.0
+        },
+        {
+            "isin": "INE242A01010",
+            "security": "INDIAN OIL CORPORATION LIMITED EQUITY SHARES",
+            "currentbal": 31.0,
+            "freebal": 31.0,
+            "marketpricefacevalue": 167.75,
+            "value": 5200.25
+        },
+        {
+            "isin": "INE053F01010",
+            "security": "INDIAN RAILWAY FINANCE CORPORATION LIMITED # EQUITY SHARES",
+            "currentbal": 4.0,
+            "freebal": 4.0,
+            "marketpricefacevalue": 142.4,
+            "value": 569.6
+        },
+        {
+            "isin": "INE154A01025",
+            "security": "ITC LIMITED - EQUITY SHARES OF RE.1/- AFTER SPLIT",
+            "currentbal": 8.0,
+            "freebal": 8.0,
+            "marketpricefacevalue": 428.55,
+            "value": 3428.4
+        },
+        {
+            "isin": "INF204KB17I5",
+            "security": "NIPPON LIFE INDIA AM LTD#NIPPON INDIA MF-NIPPON INDIA ETF GOLD BEES",
+            "currentbal": 2.0,
+            "freebal": 2.0,
+            "marketpricefacevalue": 56.63,
+            "value": 113.26
+        },
+        {
+            "isin": "INF204KB14I2",
+            "security": "NIPPON LIFE INDIA AM LTD#NIPPON INDIA MF-NIPPON INDIA ETF NIFTY 50 BEES",
+            "currentbal": 1.0,
+            "freebal": 1.0,
+            "marketpricefacevalue": 247.13,
+            "value": 247.13
+        },
+        {
+            "isin": "INE733E01010",
+            "security": "NTPC LIMITED-EQUITY SHARES",
+            "currentbal": 145.0,
+            "freebal": 145.0,
+            "marketpricefacevalue": 335.95,
+            "value": 48712.75
+        },
+        {
+            "isin": "INE750A01020",
+            "security": "ORIENTAL HOTELS LIMITED- NEW EQUITY SHARES OF RE. 1/- AFTER SUB-DIVISION",
+            "currentbal": 1.0,
+            "freebal": 1.0,
+            "marketpricefacevalue": 115.85,
+            "value": 115.85
+        },
+        {
+            "isin": "INE415G01027",
+            "security": "RAIL VIKAS NIGAM LIMITED # EQUITY SHARES",
+            "currentbal": 3.0,
+            "freebal": 3.0,
+            "marketpricefacevalue": 252.95,
+            "value": 758.85
+        },
+        {
+            "isin": "INE330H01018",
+            "security": "RELIANCE COMMUNICATIONS LIMITED - EQUITY SHARES",
+            "currentbal": 5.0,
+            "freebal": 5.0,
+            "marketpricefacevalue": 1.82,
+            "value": 9.1
+        },
+        {
+            "isin": "INE064C01022",
+            "security": "TRIDENT LIMITED#NEW EQUITY SHARES WITH FACE VALUE RE. 1/- AFTER SUB-DIVISION",
+            "currentbal": 50.0,
+            "freebal": 50.0,
+            "marketpricefacevalue": 36.54,
+            "value": 1827.0
+        },
+        {
+            "isin": "INE669E01016",
+            "security": "VODAFONE IDEA LTD # EQUITY SHARES",
+            "currentbal": 5.0,
+            "freebal": 5.0,
+            "marketpricefacevalue": 13.24,
+            "value": 66.2
+        }
+    ],
+    "MFHoldings": [
+        {
+            "schemename": "D055A - SBI  Nifty Index Fund - Direct Plan - Growth",
+            "isin": "INF200K01TE8 28455236/0",
+            "nav": 203.7423,
+            "cumulativeamountinvested": 12500.0,
+            "valuation": 15266.82,
+            "averagetotalexpenseratio": 0.0,
+            "grosscommissionpaidtodistributors": 0.0
+        },
+        {
+            "schemename": "D079B - SBI Savings Fund - Direct Plan - Growth",
+            "isin": "INF200K01SZ5 28455236/0",
+            "nav": 40.4415,
+            "cumulativeamountinvested": 13000.0,
+            "valuation": 14074.13,
+            "averagetotalexpenseratio": 0.0,
+            "grosscommissionpaidtodistributors": 0.0
+        },
+        {
+            "schemename": "SRGP - SUNDARAM SERVICES FUND REGULAR GROWTH",
+            "isin": "INF903JA1EX7",
+            "nav": 27.9977,
+            "cumulativeamountinvested": 2900.0,
+            "valuation": 3675.4,
+            "averagetotalexpenseratio": 1.94,
+            "grosscommissionpaidtodistributors": 22.29
+        }
+    ]
+}

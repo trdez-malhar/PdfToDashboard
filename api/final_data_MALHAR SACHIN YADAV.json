@@ -1,0 +1,166 @@
+{
+    "client_info": {
+        "name": "MALHAR SACHIN YADAV"
+    },
+    "accounts": [
+        {
+            "name": "CDSL Demat Account",
+            "details": "ZERODHA BROKING LIMITED DP Id: 12081601   Client Id :10950391",
+            "num_isin_scheme": 3.0,
+            "value": 23317.0
+        },
+        {
+            "name": "Mutual Fund Folios",
+            "details": "5 Folios",
+            "num_isin_scheme": 5.0,
+            "value": 229758.55
+        }
+    ],
+    "portfolio": [
+        {
+            "month": "April",
+            "year": 2023,
+            "value": 164040.44
+        },
+        {
+            "month": "May",
+            "year": 2023,
+            "value": 172590.3
+        },
+        {
+            "month": "June",
+            "year": 2023,
+            "value": 181187.07
+        },
+        {
+            "month": "July",
+            "year": 2023,
+            "value": 190793.88
+        },
+        {
+            "month": "August",
+            "year": 2023,
+            "value": 194522.98
+        },
+        {
+            "month": "October",
+            "year": 2023,
+            "value": 212072.15
+        },
+        {
+            "month": "September",
+            "year": 2023,
+            "value": 218117.96
+        },
+        {
+            "month": "November",
+            "year": 2023,
+            "value": 225301.29
+        },
+        {
+            "month": "December",
+            "year": 2023,
+            "value": 239973.47
+        },
+        {
+            "month": "January",
+            "year": 2024,
+            "value": 249680.44
+        },
+        {
+            "month": "February",
+            "year": 2024,
+            "value": 250720.18
+        },
+        {
+            "month": "March",
+            "year": 2024,
+            "value": 253075.55
+        }
+    ],
+    "asset_allocation": [
+        {
+            "name": "Equity",
+            "Value": 23317.0,
+            "Percentage": "9.21"
+        },
+        {
+            "name": "Mutual Fund Folios",
+            "Value": 229758.55,
+            "Percentage": "90.79"
+        }
+    ],
+    "CDSLHoldings": [
+        {
+            "isin": "INE053F01010",
+            "security": "INDIAN RAILWAY FINANCE CORPORATION LIMITED # EQUITY SHARES",
+            "currentbal": 80.0,
+            "freebal": 80.0,
+            "marketpricefacevalue": 142.4,
+            "value": 11392.0
+        },
+        {
+            "isin": "INE338D01028",
+            "security": "BODAL CHEMICALS LIMITED- NEW EQUITY SHARES OF RS. 2/- AFTER SUB-DIVISION",
+            "currentbal": 50.0,
+            "freebal": 50.0,
+            "marketpricefacevalue": 73.26,
+            "value": 3663.0
+        },
+        {
+            "isin": "INE743M01012",
+            "security": "RHI MAGNESITA INDIA LIMITED#EQUITY SHARES",
+            "currentbal": 15.0,
+            "freebal": 15.0,
+            "marketpricefacevalue": 550.8,
+            "value": 8262.0
+        }
+    ],
+    "MFHoldings": [
+        {
+            "schemename": "FEGP - Canara Robeco Focused Equity Fund - Regular Growth",
+            "isin": "INF760K01JT0",
+            "nav": 16.57,
+            "cumulativeamountinvested": 25125.31,
+            "valuation": 35119.68,
+            "averagetotalexpenseratio": 2.0,
+            "grosscommissionpaidtodistributors": 243.76
+        },
+        {
+            "schemename": "GDGP - NIPPON INDIA GOLD SAVINGS FUND - GROWTH PLAN GROWTH OPTION",
+            "isin": "INF204K01KN0",
+            "nav": 26.262,
+            "cumulativeamountinvested": 729.07,
+            "valuation": 1489.08,
+            "averagetotalexpenseratio": 0.34,
+            "grosscommissionpaidtodistributors": 1.74
+        },
+        {
+            "schemename": "EOGP - NIPPON INDIA MULTI CAP FUND - GROWTH PLAN GROWTH OPTION",
+            "isin": "INF204K01489",
+            "nav": 244.6139,
+            "cumulativeamountinvested": 33439.36,
+            "valuation": 157262.52,
+            "averagetotalexpenseratio": 1.65,
+            "grosscommissionpaidtodistributors": 389.23
+        },
+        {
+            "schemename": "001RG - Parag Parikh Flexi Cap Fund - Regular Plan",
+            "isin": "INF879O01019",
+            "nav": 69.3187,
+            "cumulativeamountinvested": 25000.05,
+            "valuation": 35711.19,
+            "averagetotalexpenseratio": 1.35,
+            "grosscommissionpaidtodistributors": 120.87
+        },
+        {
+            "schemename": "LFG - Parag Parikh Liquid Fund Regular Plan INF879O01035 Growth",
+            "isin": null,
+            "nav": 1333.9286,
+            "cumulativeamountinvested": 155.22,
+            "valuation": 176.08,
+            "averagetotalexpenseratio": 0.26,
+            "grosscommissionpaidtodistributors": 0.09
+        }
+    ]
+}

@@ -178,7 +178,7 @@ output.json
 uploads/
 *.ipynb
 *.csv
-*.json
+
 *.pdf
 
 .ipynb

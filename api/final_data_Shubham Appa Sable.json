@@ -1,0 +1,275 @@
+{
+    "client_info": {
+        "name": "Shubham Appa Sable"
+    },
+    "accounts": [
+        {
+            "name": "CDSL Demat Account",
+            "details": "ZERODHA BROKING LIMITED DP Id: 12081601   Client Id :68651366",
+            "num_isin_scheme": 0.0,
+            "value": 0.0
+        },
+        {
+            "name": "CDSL Demat Account",
+            "details": "GROWW INVEST TECH PRIVATE LIMITED DP Id: 12088703   Client Id :41971094",
+            "num_isin_scheme": 1.0,
+            "value": 12.05
+        },
+        {
+            "name": "CDSL Demat Account",
+            "details": "STOCK HOLDING CORPORATION OF INDIA LTD. (RETAIL) DP Id: 16010100   Client Id :00587776",
+            "num_isin_scheme": 15.0,
+            "value": 467.7
+        },
+        {
+            "name": "CDSL Demat Account",
+            "details": "HDFC SECURITIES LIMITED DP Id: 12086700   Client Id :04665944",
+            "num_isin_scheme": 0.0,
+            "value": 0.0
+        },
+        {
+            "name": "CDSL Demat Account",
+            "details": "ANGEL ONE LIMITED DP Id: 12033200   Client Id :93552091",
+            "num_isin_scheme": 0.0,
+            "value": 0.0
+        },
+        {
+            "name": "CDSL Demat Account",
+            "details": "UPSTOX SECURITIES PRIVATE LIMITED DP Id: 12081800   Client Id :76492715",
+            "num_isin_scheme": 1.0,
+            "value": 85.36
+        }
+    ],
+    "portfolio": [
+        {
+            "month": "January",
+            "year": 2024,
+            "value": 74.39
+        },
+        {
+            "month": "March",
+            "year": 2024,
+            "value": 79.92
+        },
+        {
+            "month": "February",
+            "year": 2024,
+            "value": 80.15
+        },
+        {
+            "month": "April",
+            "year": 2024,
+            "value": 86.92
+        },
+        {
+            "month": "May",
+            "year": 2024,
+            "value": 91.73
+        },
+        {
+            "month": "June",
+            "year": 2024,
+            "value": 94.42
+        },
+        {
+            "month": "September",
+            "year": 2024,
+            "value": 101.31
+        },
+        {
+            "month": "August",
+            "year": 2024,
+            "value": 103.33
+        },
+        {
+            "month": "July",
+            "year": 2024,
+            "value": 104.46
+        },
+        {
+            "month": "October",
+            "year": 2024,
+            "value": 206.9
+        },
+        {
+            "month": "November",
+            "year": 2024,
+            "value": 535.51
+        },
+        {
+            "month": "December",
+            "year": 2024,
+            "value": 565.11
+        }
+    ],
+    "asset_allocation": [
+        {
+            "name": "Equity",
+            "Value": 265.56,
+            "Percentage": "46.99"
+        },
+        {
+            "name": "Mutual Funds Held in Demat Form",
+            "Value": 299.55,
+            "Percentage": "53.01"
+        }
+    ],
+    "CDSLHoldings": [
+        {
+            "isin": "INE221H01019",
+            "security": "GTL INFRASTRUCTURE LIMITED - EQUITY SHARES",
+            "currentbal": 1.0,
+            "freebal": 1.0,
+            "marketpricefacevalue": 2.05,
+            "value": 2.05
+        },
+        {
+            "isin": "INE145J01032",
+            "security": "GUJARAT TOOLROOM LIMITED#NEW EQUITY SHARES WITH FACE VALUE RE.1/- AFTER SUB-DIVISION",
+            "currentbal": 1.0,
+            "freebal": 1.0,
+            "marketpricefacevalue": 16.4,
+            "value": 16.4
+        },
+        {
+            "isin": "INE300B01022",
+            "security": "INDIAN INFOTECH AND SOFTWARE LIMITED-NEW EQUITY SHARE OF RE 1/- AFTER SUB-DIVISION",
+            "currentbal": 3.0,
+            "freebal": 3.0,
+            "marketpricefacevalue": 1.33,
+            "value": 3.99
+        },
+        {
+            "isin": "INE351F01018",
+            "security": "JAIPRAKASH POWER VENTURES LIMITED-EQUITY SHARES",
+            "currentbal": 1.0,
+            "freebal": 1.0,
+            "marketpricefacevalue": 17.71,
+            "value": 17.71
+        },
+        {
+            "isin": "INE359U01028",
+            "security": "LANCER CONTAINER LINES LIMITED#NEW EQUITY SHARES WITH FACE VALUE RS.5/- AFTER SUBDIVISION",
+            "currentbal": 1.0,
+            "freebal": 1.0,
+            "marketpricefacevalue": 36.08,
+            "value": 36.08
+        },
+        {
+            "isin": "INE094S01041",
+            "security": "MISHTANN FOODS LIMITED#NEW EQUITY SHARES FACE VALUE RE. 1/- AFTER SUB DIVISION",
+            "currentbal": 2.0,
+            "freebal": 2.0,
+            "marketpricefacevalue": 7.24,
+            "value": 14.48
+        },
+        {
+            "isin": "INF247L01AP3",
+            "security": "MOTILAL OSWAL AMC LTD#MOTILAL OSWAL MF- MOTILAL OSWAL NASDAQ 100 ETF",
+            "currentbal": 1.0,
+            "freebal": 1.0,
+            "marketpricefacevalue": 214.19,
+            "value": 214.19
+        },
+        {
+            "isin": "INE230R01035",
+            "security": "RAMA STEEL TUBES LIMITED#NEW EQUITY SHARES WITH FACE VALUE RS.1/- AFTER SUB-DIVISION",
+            "currentbal": 1.0,
+            "freebal": 1.0,
+            "marketpricefacevalue": 12.05,
+            "value": 12.05
+        },
+        {
+            "isin": "INE399K01017",
+            "security": "RATTANINDIA POWER LIMITED # EQUITY SHARES",
+            "currentbal": 1.0,
+            "freebal": 1.0,
+            "marketpricefacevalue": 13.68,
+            "value": 13.68
+        },
+        {
+            "isin": "INE248B01023",
+            "security": "SAWACA BUSINESS MACHINES LIMITED#NEW EQUITY SHARES WITH FACE VALUE Re. 1/- AFTER SUBDIVISION",
+            "currentbal": 10.0,
+            "freebal": 10.0,
+            "marketpricefacevalue": 0.75,
+            "value": 7.5
+        },
+        {
+            "isin": "INE457P01020",
+            "security": "TOYAM SPORTS LIMITED # NEW EQ SH WITH FV RE.1/- AFTER SUB DIVISION",
+            "currentbal": 1.0,
+            "freebal": 1.0,
+            "marketpricefacevalue": 2.42,
+            "value": 2.42
+        },
+        {
+            "isin": "INE669E01016",
+            "security": "VODAFONE IDEA LTD # EQUITY SHARES",
+            "currentbal": 5.0,
+            "freebal": 5.0,
+            "marketpricefacevalue": 7.94,
+            "value": 39.7
+        },
+        {
+            "isin": "INE528G01035",
+            "security": "YES BANK LIMITED#NEW EQUITY SHARES OF FV RS. 2/-",
+            "currentbal": 4.0,
+            "freebal": 4.0,
+            "marketpricefacevalue": 19.6,
+            "value": 78.4
+        }
+    ],
+    "MFHoldings": [
+        {
+            "schemename": "FEGP - Canara Robeco Focused Equity Fund - Regular Growth",
+            "isin": "INF760K01JT0",
+            "nav": 16.57,
+            "cumulativeamountinvested": 25125.31,
+            "valuation": 35119.68,
+            "averagetotalexpenseratio": 2.0,
+            "grosscommissionpaidtodistributors": 243.76,
+            "user_id": 52
+        },
+        {
+            "schemename": "GDGP - NIPPON INDIA GOLD SAVINGS FUND - GROWTH PLAN GROWTH OPTION",
+            "isin": "INF204K01KN0",
+            "nav": 26.262,
+            "cumulativeamountinvested": 729.07,
+            "valuation": 1489.08,
+            "averagetotalexpenseratio": 0.34,
+            "grosscommissionpaidtodistributors": 1.74,
+            "user_id": 52
+        },
+        {
+            "schemename": "EOGP - NIPPON INDIA MULTI CAP FUND - GROWTH PLAN GROWTH OPTION",
+            "isin": "INF204K01489",
+            "nav": 244.6139,
+            "cumulativeamountinvested": 33439.36,
+            "valuation": 157262.52,
+            "averagetotalexpenseratio": 1.65,
+            "grosscommissionpaidtodistributors": 389.23,
+            "user_id": 52
+        },
+        {
+            "schemename": "001RG - Parag Parikh Flexi Cap Fund - Regular Plan",
+            "isin": "INF879O01019",
+            "nav": 69.3187,
+            "cumulativeamountinvested": 25000.05,
+            "valuation": 35711.19,
+            "averagetotalexpenseratio": 1.35,
+            "grosscommissionpaidtodistributors": 120.87,
+            "user_id": 52
+        },
+        {
+            "schemename": "LFG - Parag Parikh Liquid Fund Regular Plan INF879O01035 Growth",
+            "isin": null,
+            "nav": 1333.9286,
+            "cumulativeamountinvested": 155.22,
+            "valuation": 176.08,
+            "averagetotalexpenseratio": 0.26,
+            "grosscommissionpaidtodistributors": 0.09,
+            "user_id": 52
+        }
+    ]
+}
