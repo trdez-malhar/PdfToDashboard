@@ -3,6 +3,9 @@ import axios from "axios";
 import { Bar, Pie, Scatter } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, ScatterController, LineElement, PointElement} from "chart.js";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { FaWallet, FaChartLine, FaMoneyBillWave } from "react-icons/fa"; // Importing icons
+import { FiTrendingUp, FiTrendingDown, FiCreditCard } from "react-icons/fi";
+
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, ScatterController, LineElement, PointElement);
 
@@ -175,184 +178,187 @@ const totalPortfolioValue = portfolioData?.accounts?.length > 0
   ? portfolioData.accounts.reduce((sum, account) => sum + account.value, 0)
   : 0;
   return (
-    <div className="container mt-4">
-      <div className="p-4 border rounded shadow bg-white">
-        {/* Cards Section */}
-        <div className="row d-flex justify-content-center mb-4">
-          <div className="col-md-3 mx-2" onClick={() => setView("cdsl")}>
-            <div className="card text-center bg-light">
-              <div className="card-body">
-                <h5 className="card-title">CDSL Demat</h5>
-                <p className="card-text">
-                  <strong>Value: ₹{portfolioData.accounts[0].value.toLocaleString()}</strong>
-                </p>
-              </div>
-            </div>
-          </div>
+    <div className="container mt-4 p-4 border rounded">
 
-          <div className="col-md-3 mx-2" onClick={() => setView("mf")}>
-            <div className="card text-center bg-light">
+      {/* <div className="p-4 border rounded shadow">   */}
+      <div className="d-flex">
+        {/* CDSL Demat Card */}
+        <div className="col-md-4 mx-2" onClick={() => setView("cdsl")}> 
+            <div className="card custom-card purple-card">
               <div className="card-body">
-                <h5 className="card-title">Mutual Funds</h5>
-                <p className="card-text">
-                  <strong>Value: ₹{portfolioData.accounts[1].value.toLocaleString()}</strong>
-                </p>
+                <FaWallet className="card-icon" />
+                <h3 className="card-value">₹{portfolioData.accounts[0].value.toLocaleString()}</h3>
+                
+                <p className="card-title">CDSL Demat</p>
               </div>
             </div>
           </div>
-
-          <div className="col-md-3 mx-2" onClick={() => setView("portfolio")}>
-            <div className="card text-center bg-light">
+    
+          {/* Mutual Funds Card */}
+          <div className="col-md-4 mx-2" onClick={() => setView("mf")}> 
+            <div className="card custom-card blue-card">
               <div className="card-body">
-                <h5 className="card-title">Total Portfolio</h5>
-                <p className="card-text">
-                  <strong>Value: ₹{totalPortfolioValue.toLocaleString()}</strong>
-                </p>
+                <FiCreditCard className="card-icon" />
+                <h3 className="card-value">₹{portfolioData.accounts[1].value.toLocaleString()}</h3>
+                
+                <p className="card-title">Mutual Funds</p>
               </div>
             </div>
           </div>
+    
+          {/* Total Portfolio Card */}
+          <div className="col-md-4 mx-2" onClick={() => setView("portfolio")}> 
+            <div className="card custom-card purple-card">
+              <div className="card-body">
+                <FaWallet className="card-icon" />
+                <h3 className="card-value">₹{totalPortfolioValue.toLocaleString()}</h3>
+              
+                <p className="card-title">Total Portfolio</p>
+              </div>
+            </div>
+          </div>
+        
         </div>
-
-        {/* Portfolio View */}
-        {view === "portfolio" && (
-          <>
-            <h4 className="mt-4 text-center">Portfolio Summary</h4>
-            <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
-              <div style={{ height: "400px", width: "70%" }}>
-                <Bar 
-                  data={portfolioChartData} 
-                  options={{ 
-                    responsive: true, 
-                    maintainAspectRatio: false 
-                  }} 
-                />
-              </div>
-            </div>
-
-            <h4 className="mt-4 text-center">Asset Allocation</h4>
-            <div className="row align-items-center g-0">
-              <div className="col-md-5 d-flex justify-content-center" style={{ height: "250px" }}>
-                <Pie data={assetAllocationChartData} options={{ responsive: true, maintainAspectRatio: false }} />
-              </div>
-              <div className="col-md-7">
-                <table className="table table-bordered mb-0">
-                  <thead>
-                    <tr>
-                      <th>Asset Type</th>
-                      <th>Value (₹)</th>
-                      <th>Percentage (%)</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {portfolioData.asset_allocation.map((item) => (
-                      <tr key={item.name}>
-                        <td>{item.name}</td>
-                        <td>{item.value.toLocaleString()}</td>
-                        <td>{item.percentage}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </>
-        )}
-
-        {/* MF Holdings View */}
-        {view === "mf" && (
-          <>
-          <h4 className="mt-4 text-center">Mutual Fund Insights</h4>
-
-          {/* Investment vs Valuation */}
-          <h5 className="mt-4">Investment vs. Valuation</h5>
-          <div style={{ height: "400px", width: "100%" }}>
-            <Bar data={investmentVsValuationData} options={{ responsive: true, maintainAspectRatio: false }} />
-          </div>
-
-          {/* NAV Distribution */}
-          <h5 className="mt-4">NAV Distribution</h5>
-          <div style={{ height: "300px", width: "100%" }}>
-            <Bar data={navDistributionData} options={{ responsive: true, maintainAspectRatio: false }} />
-          </div>
-
-          {/* Expense Ratio vs Valuation */}
-          <h5 className="mt-4">Expense Ratio vs. Valuation</h5>
-          <div style={{ height: "300px", width: "100%" }}>
-            <Scatter data={expenseVsValuationData} options={{ responsive: true, maintainAspectRatio: false }} />
-          </div>
-
-          {/* Gross Commission Paid */}
-          <h5 className="mt-4">Gross Commission Paid</h5>
-          <div style={{ height: "300px", width: "100%" }}>
-            <Pie data={commissionData} options={{ responsive: true, maintainAspectRatio: false }} />
-          </div>
-        </>
-        )}
-
-        {/* CDSL Holdings View */}
-        {view === "cdsl" && (
-          <>
-            <h4 className="mt-4">CDSL Holdings</h4>
-            {portfolioData.CDSLHoldings?.length > 0 ? (
-              <>
-                <button className="btn btn-secondary mb-2" onClick={() => setView("portfolio")}>
-                  Back
-                </button>
-                <div style={{ height: "300px", width: "100%" }}>
-                  <Pie 
-                    data={cdslHoldingsChartData}
+          {/* Portfolio View */}
+          {view === "portfolio" && (
+            <>
+              <h4 className="mt-4 text-center">Portfolio Summary</h4>
+              <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
+                <div style={{ height: "400px", width: "70%" }}>
+                  <Bar 
+                    data={portfolioChartData} 
                     options={{ 
                       responsive: true, 
-                      maintainAspectRatio: false,
-                      plugins: {
-                        legend: { display: true, position: "right", align: "start" },
-                        tooltip: { enabled: true }
-                      }
+                      maintainAspectRatio: false 
                     }} 
                   />
                 </div>
-                <h4 className="mt-4">Stock Distribution</h4>
-                <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
-                  <div style={{ height: "400px", width: "100%" }}>
-                    <Bar 
-                      data={industryStackedChartData} 
+              </div>
+
+              <h4 className="mt-4 text-center">Asset Allocation</h4>
+              <div className="row align-items-center g-0">
+                <div className="col-md-5 d-flex justify-content-center" style={{ height: "250px" }}>
+                  <Pie data={assetAllocationChartData} options={{ responsive: true, maintainAspectRatio: false }} />
+                </div>
+                <div className="col-md-7">
+                  <table className="table table-bordered mb-0">
+                    <thead>
+                      <tr>
+                        <th>Asset Type</th>
+                        <th>Value (₹)</th>
+                        <th>Percentage (%)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {portfolioData.asset_allocation.map((item) => (
+                        <tr key={item.name}>
+                          <td>{item.name}</td>
+                          <td>{item.value.toLocaleString()}</td>
+                          <td>{item.percentage}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* MF Holdings View */}
+          {view === "mf" && (
+            <>
+            <h4 className="mt-4 text-center">Mutual Fund Insights</h4>
+
+            {/* Investment vs Valuation */}
+            <h5 className="mt-4">Investment vs. Valuation</h5>
+            <div style={{ height: "400px", width: "100%" }}>
+              <Bar data={investmentVsValuationData} options={{ responsive: true, maintainAspectRatio: false }} />
+            </div>
+
+            {/* NAV Distribution */}
+            <h5 className="mt-4">NAV Distribution</h5>
+            <div style={{ height: "300px", width: "100%" }}>
+              <Bar data={navDistributionData} options={{ responsive: true, maintainAspectRatio: false }} />
+            </div>
+
+            {/* Expense Ratio vs Valuation */}
+            <h5 className="mt-4">Expense Ratio vs. Valuation</h5>
+            <div style={{ height: "300px", width: "100%" }}>
+              <Scatter data={expenseVsValuationData} options={{ responsive: true, maintainAspectRatio: false }} />
+            </div>
+
+            {/* Gross Commission Paid */}
+            <h5 className="mt-4">Gross Commission Paid</h5>
+            <div style={{ height: "300px", width: "100%" }}>
+              <Pie data={commissionData} options={{ responsive: true, maintainAspectRatio: false }} />
+            </div>
+          </>
+          )}
+
+          {/* CDSL Holdings View */}
+          {view === "cdsl" && (
+            <>
+              <h4 className="mt-4">CDSL Holdings</h4>
+              {portfolioData.CDSLHoldings?.length > 0 ? (
+                <>
+                  <button className="btn btn-secondary mb-2" onClick={() => setView("portfolio")}>
+                    Back
+                  </button>
+                  <div style={{ height: "300px", width: "100%" }}>
+                    <Pie 
+                      data={cdslHoldingsChartData}
                       options={{ 
                         responsive: true, 
-                        maintainAspectRatio: false, 
-                        plugins: { 
-                          legend: { display: true },
-                          tooltip: {
-                            callbacks: {
-                              label: function (context) {
-                                const stock = context.dataset.label;
-                                const value = context.raw;
-                                return `${stock}: ₹${value.toLocaleString()}`;
-                              }
-                            }
-                          }
-                        },
-                        scales: { 
-                          x: { stacked: true },
-                          y: {
-                            stacked: true,
-                            title: {
-                              display: true,
-                              text: 'Value (₹)'
-                            }
-                          }
+                        maintainAspectRatio: false,
+                        plugins: {
+                          legend: { display: true, position: "right", align: "start" },
+                          tooltip: { enabled: true }
                         }
                       }} 
                     />
                   </div>
-                </div>
-              </>
-            ) : (
-              <div className="text-center">No CDSL Holdings data available</div>
-            )}
-          </>
-        )}
+                  <h4 className="mt-4">Stock Distribution</h4>
+                  <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
+                    <div style={{ height: "400px", width: "100%" }}>
+                      <Bar 
+                        data={industryStackedChartData} 
+                        options={{ 
+                          responsive: true, 
+                          maintainAspectRatio: false, 
+                          plugins: { 
+                            legend: { display: true },
+                            tooltip: {
+                              callbacks: {
+                                label: function (context) {
+                                  const stock = context.dataset.label;
+                                  const value = context.raw;
+                                  return `${stock}: ₹${value.toLocaleString()}`;
+                                }
+                              }
+                            }
+                          },
+                          scales: { 
+                            x: { stacked: true },
+                            y: {
+                              stacked: true,
+                              title: {
+                                display: true,
+                                text: 'Value (₹)'
+                              }
+                            }
+                          }
+                        }} 
+                      />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div className="text-center">No CDSL Holdings data available</div>
+              )}
+            </>
+          )}
       </div>
-    </div>
+    // </div>
   );
 };
 export default Dashboard;

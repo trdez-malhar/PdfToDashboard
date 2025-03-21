@@ -11,3 +11,68 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.custom-card {
+  width: 300px;  /* Reduce width */
+  border-radius: 16px;
+  padding: 10px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+/* .purple-card {
+  background: linear-gradient(135deg, #c8afe3, #2575fc);
+}
+
+.blue-card {
+  background: linear-gradient(135deg, #007bff, #00d4ff);
+} */
+
+.card-icon {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.card-value {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.card-title {
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.card-trend {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 18px;
+}
+
+
+.card-toggle {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.toggle-btn {
+  background: transparent;
+  border: 1px solid white;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.toggle-btn.active {
+  background: white;
+  color: black;
+}
+
+
+.container {
+  background-color: #f0f0f0;
+}
